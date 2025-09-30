@@ -64,7 +64,7 @@ const Navbar = () => {
             </li>
             
             <li>
-              <Link to="/reports" className='text-black hover:text-[#09adce] transition duration-300  flex items-center gap-1 text-sm'>
+              <Link to="/accounting" className='text-black hover:text-[#09adce] transition duration-300  flex items-center gap-1 text-sm'>
                  التقارير والمحاسبة <FaBarsProgress  className='text-gray-500' size={18}  />
               </Link>
             </li>

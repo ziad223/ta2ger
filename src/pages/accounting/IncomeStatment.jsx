@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import Container from '../../components/shared/Container';
 import CustomSelect from '../../components/shared/CustomSelect';
 import Table from '../../components/shared/Table';
-import { FaFileExcel, FaPrint } from 'react-icons/fa';
+import { FaChevronRight, FaFileExcel, FaPrint } from 'react-icons/fa';
 import * as XLSX from 'xlsx';
+import { Link } from 'react-router-dom';
 
 const IncomeStatement = () => {
   const [selectedAccount, setSelectedAccount] = useState(null);
@@ -59,9 +60,17 @@ const IncomeStatement = () => {
   return (
     <div className="my-20 min-h-screen">
       <Container>
-        <div className="bg-white shadow-lg rounded-lg p-5">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold mb-6">قائمة الدخل</h2>
+        <div className="bg-white shadow-lg rounded-lg p-5 ">
+          <div className="flex items-center justify-between mb-10">
+           <div className="flex items-center gap-3 ">
+             <Link
+                to="/accounting"
+                className="bg-gray-500 rounded-lg p-2 text-white font-semibold cursor-pointer"
+              >
+                <FaChevronRight />
+              </Link>
+            <h2 className="text-xl font-bold ">قائمة الدخل</h2>
+           </div>
             <div className="flex items-center gap-3">
               {/* زر الطباعة */}
               <button

@@ -93,12 +93,20 @@ const Clients = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               value={searchTerm}
             />
+             <div className="flex gap-3 items-center">
+              <div
+              className="bg-[#0dcaf0] flex items-center justify-center px-3 h-[35px] text-white rounded-md w-full md:w-auto"
+            >
+             عدد العملاء 
+             <span>: 2</span>
+            </div>
             <button
               onClick={() => setAddModalOpen(true)}
               className="bg-[#2ba670] px-3 h-[35px] text-white rounded-md w-full md:w-auto"
             >
               أضف عميل +
             </button>
+             </div>
           </div>
 
           <Table columns={columns} data={dataWithActions} />

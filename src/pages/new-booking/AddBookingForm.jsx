@@ -270,14 +270,29 @@ const AddBookingForm = () => {
               <FaUser />
               <span>الخدمات</span>
             </div>
-              <CustomSelect
-        options={serviceOptions}
-        value={selectedService}
-        onChange={handleSelectChange}
-        placeholder="اختر الخدمة"
-        isMulti={false}
-        className="rounded-[10px]"
-      />
+           <CustomSelect
+  options={serviceOptions}
+  value={selectedService}
+  onChange={handleSelectChange}
+  placeholder="اختر الخدمة"
+  isMulti={false}
+  className="rounded-[10px]"
+  styles={{
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isFocused
+        ? "#9CA3AF" 
+        : "#9CA3AF",
+      color: "white", 
+      cursor : 'pointer'
+    }),
+    menu: (provided) => ({
+      ...provided,
+      backgroundColor: "#9CA3AF", // خلفية القائمة نفسها
+    }),
+  }}
+/>
+
 
           </div>
           <div className="p-5 flex items-center justify-center flex-col gap-3">
@@ -500,7 +515,7 @@ const AddBookingForm = () => {
         {/* زر الحفظ */}
         <button
           onClick={handleSubmit}
-          className="bg-[#09adce] mt-5 hover:bg-blue-600 text-white px-6 py-3 rounded-md font-medium transition-colors w-full md:w-auto"
+          className="bg-green-600 mt-5 hover:bg-blue-600 text-white px-6 py-3 rounded-md font-medium transition-colors w-full md:w-auto"
         >
           حفظ الحجز
         </button>

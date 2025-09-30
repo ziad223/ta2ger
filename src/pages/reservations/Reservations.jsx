@@ -11,6 +11,7 @@ import { PiNewspaperClippingThin } from "react-icons/pi";
 import { FaTrashAlt, FaEdit } from "react-icons/fa";
 import { RiFilePaperLine } from "react-icons/ri";
 import { Link, Links } from "react-router-dom";
+import Container from "../../components/shared/Container";
 
 // Adding CSS for the tooltip and dropdown
 const customStyles = `
@@ -381,7 +382,8 @@ const Reservations = () => {
   return (
     <>
       <style>{customStyles}</style>
-      <div className="p-4 min-h-screen my-10">
+     <Container>
+       <div className="p-4 min-h-screen my-10">
         <h2 className="text-xl font-bold mb-4">الحجوزات</h2>
 
         <div className="bg-white p-4 rounded-lg shadow-lg">
@@ -451,6 +453,7 @@ const Reservations = () => {
           <Table columns={columns} data={dataWithActions} />
         </div>
       </div>
+     </Container>
 
       {/* مودال التعديل */}
       <EditReservationModal

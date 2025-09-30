@@ -2,19 +2,23 @@
 import React, { useState, useMemo } from 'react';
 import Container from '../../components/shared/Container';
 import Table from '../../components/shared/Table';
-import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { FaEdit, FaEye, FaPrint, FaTrashAlt } from 'react-icons/fa';
 import EditModal from './EditModal';
 import DeleteModal from './DeleteModal';
 import CustomSelect from '../../components/shared/CustomSelect';
 import AddInvoiceModal from './AddInvoiceModal';
+import ViewInvoiceModal from "./ViewInvoiceModal"; 
 
 const NewInvoices = () => {
+  const [isViewOpen, setViewOpen] = useState(false);
   const [invoiceSearch, setInvoiceSearch] = useState('');
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
   const [paymentMethodFilter, setPaymentMethodFilter] = useState('');
   const [clientFilter, setClientFilter] = useState('');
-
+const handlePrint = () => {
+  window.print();
+};
   const [invoices, setInvoices] = useState([
     {
       id: 101,
@@ -94,6 +98,17 @@ const NewInvoices = () => {
     actions: (
       <div className="flex gap-2 justify-center">
         <button
+  onClick={() => {
+    setSelectedInvoice(inv);
+    setViewOpen(true);
+  }}
+  className="p-2 bg-[#8e44ad] text-white rounded-md"
+>
+  <FaEye className="text-lg" />
+</button>
+
+       
+         <button
           onClick={() => {
             setSelectedInvoice(inv);
             setEditModalOpen(true);
@@ -110,6 +125,7 @@ const NewInvoices = () => {
           className="bg-red-500 text-white rounded-sm w-[30px] h-[30px] flex items-center justify-center"
         >
           <FaTrashAlt size={16} />
+          
         </button>
       </div>
     )
@@ -129,15 +145,24 @@ const NewInvoices = () => {
   return (
     <Container>
       <div className="p-4 min-h-screen my-10">
-        <div className="flex items-center justify-between w-full">
-          <h2 className="text-xl font-bold mb-4">الفواتير</h2>
-          <button
-            onClick={() => setIsAddModalOpen(true)}
-            className="bg-[#2ba670] px-3 h-[35px] text-white rounded-md"
-          >
-            أضف فاتورة +
-          </button>
-        </div>
+      <div className="flex items-center justify-between w-full">
+  <h2 className="text-xl font-bold mb-4">الفواتير المبسطة</h2>
+  <div className="flex gap-2">
+    <button
+      onClick={handlePrint}
+      className="bg-yellow-500 px-3 h-[35px] text-white rounded-md"
+    >
+      <FaPrint/>
+    </button>
+    <button
+      onClick={() => setIsAddModalOpen(true)}
+      className="bg-[#2ba670] px-3 h-[35px] text-white rounded-md"
+    >
+      أضف فاتورة +
+    </button>
+  </div>
+</div>
+
 
         <div className="bg-white p-4 rounded-lg shadow-lg">
           {/* فلاتر البحث */}
@@ -217,6 +242,12 @@ const NewInvoices = () => {
           onSave={(newInvoice) => setInvoices(prev => [...prev, newInvoice])}
           clients={[...new Set(invoices.map(inv => inv.client))]} // قائمة العملاء المميزة
         />
+        <ViewInvoiceModal
+  isOpen={isViewOpen}
+  onClose={() => setViewOpen(false)}
+  invoice={selectedInvoice}
+/>
+
       </div>
     </Container>
   );

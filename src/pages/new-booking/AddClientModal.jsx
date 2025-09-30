@@ -1,5 +1,6 @@
 // AddClientModal.js
 import React, { useState } from 'react';
+import CustomSelect from '../../components/shared/CustomSelect';
 
 const AddClientModal = ({ isOpen, onClose }) => {
   const [clientData, setClientData] = useState({
@@ -48,7 +49,7 @@ const AddClientModal = ({ isOpen, onClose }) => {
               <input
                 type="text"
                 required
-                className="w-full placeholder:text-sm border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09adce] focus:border-transparent"
+                className="w-full placeholder:text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09adce] focus:border-transparent"
                 value={clientData.name}
                 onChange={(e) => handleChange('name', e.target.value)}
                 placeholder="أدخل اسم العميل"
@@ -61,7 +62,7 @@ const AddClientModal = ({ isOpen, onClose }) => {
               <input
                 type="text"
                 required
-                className="w-full placeholder:text-sm border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09adce] focus:border-transparent"
+                className="w-full placeholder:text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09adce] focus:border-transparent"
                 value={clientData.idNumber}
                 onChange={(e) => handleChange('idNumber', e.target.value)}
                 placeholder="أدخل رقم الهوية"
@@ -74,7 +75,7 @@ const AddClientModal = ({ isOpen, onClose }) => {
               <input
                 type="text"
                 required
-                className="w-full placeholder:text-sm border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09adce] focus:border-transparent"
+                className="w-full placeholder:text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09adce] focus:border-transparent"
                 value={clientData.mobile}
                 onChange={(e) => handleChange('mobile', e.target.value)}
                 placeholder="أدخل رقم الجوال"
@@ -86,7 +87,7 @@ const AddClientModal = ({ isOpen, onClose }) => {
               <label className="block mb-2 font-medium text-sm text-gray-700">رقم هاتف آخر</label>
               <input
                 type="text"
-                className="w-full placeholder:text-sm border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09adce] focus:border-transparent"
+                className="w-full placeholder:text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09adce] focus:border-transparent"
                 value={clientData.otherPhone}
                 onChange={(e) => handleChange('otherPhone', e.target.value)}
                 placeholder="أدخل رقم هاتف إضافي"
@@ -98,31 +99,35 @@ const AddClientModal = ({ isOpen, onClose }) => {
               <label className="block mb-2 font-medium text-sm text-gray-700">الرقم الضريبي</label>
               <input
                 type="text"
-                className="w-full placeholder:text-sm border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09adce] focus:border-transparent"
+                className="w-full placeholder:text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09adce] focus:border border-gray-200-transparent"
                 value={clientData.taxNumber}
                 onChange={(e) => handleChange('taxNumber', e.target.value)}
                 placeholder="أدخل الرقم الضريبي"
               />
             </div>
 
-            {/* اسم القاعة */}
-            <div>
-              <label className="block mb-2 font-medium text-sm text-gray-700">اسم القاعة</label>
-              <input
-                type="text"
-                className="w-full placeholder:text-sm border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09adce] focus:border-transparent"
-                value={clientData.hallName}
-                onChange={(e) => handleChange('hallName', e.target.value)}
-                placeholder="أدخل اسم القاعة"
-              />
-            </div>
+           {/* اسم القاعة */}
+<div>
+  <label className="block mb-2 font-medium text-sm text-gray-700">اسم القاعة</label>
+  <CustomSelect
+    options={[
+      { value: "hall1", label: "القاعة الرئيسية" },
+      { value: "hall2", label: "القاعة الجانبية" },
+      { value: "hall3", label: "القاعة الذهبية" },
+    ]}
+    value={clientData.hallName ? { value: clientData.hallName, label: clientData.hallName } : null}
+    onChange={(selected) => handleChange("hallName", selected ? selected.value : "")}
+    placeholder="اختر القاعة"
+  />
+</div>
+
           </div>
 
           {/* العنوان */}
           <div>
             <label className="block mb-2 font-medium text-sm text-gray-700">العنوان</label>
             <textarea
-              className="w-full placeholder:text-sm border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09adce] focus:border-transparent resize-vertical min-h-[80px]"
+              className="w-full placeholder:text-sm border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#09adce] focus:border-transparent resize-vertical min-h-[80px]"
               value={clientData.address}
               onChange={(e) => handleChange('address', e.target.value)}
               placeholder="أدخل العنوان الكامل"

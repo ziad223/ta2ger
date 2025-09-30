@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Container from '../../components/shared/Container';
 import { Link } from 'react-router-dom';
 import { FaArrowLeftLong, FaPlus, FaPrint } from 'react-icons/fa6';
-import { FaEye, FaEdit, FaTrash, FaRegTrashAlt } from 'react-icons/fa';
+import { FaEye, FaEdit, FaTrash, FaRegTrashAlt, FaChevronRight } from 'react-icons/fa';
 import Table from '../../components/shared/Table';
 import ViewModal from './ViewModal';
 import EditModal from './EditModal';
@@ -74,17 +74,18 @@ const Restrictions = () => {
         {/* العنوان + الأزرار */}
         <div className="bg-white shadow-lg rounded-lg p-5">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold">القيود اليومية</h2>
-
             <div className="flex items-center gap-3">
-              {/* العودة */}
               <Link
                 to="/accounting"
-                className="flex items-center gap-2 px-4 py-2 rounded-md text-white bg-gray-500 font-bold hover:bg-gray-600 transition"
+                className="bg-gray-500 rounded-lg p-2 text-white font-semibold cursor-pointer"
               >
-                <FaArrowLeftLong className="text-lg" />
-                <span>العودة</span>
+                <FaChevronRight />
               </Link>
+              <h2 className="text-xl font-bold">القيود اليومية</h2>
+
+            </div>
+            <div className="flex items-center gap-3">
+              {/* العودة */}
 
               {/* إضافة قيد */}
               <button className="flex items-center gap-2 px-4 py-2 rounded-md text-white bg-[#09adce] font-bold hover:bg-[#0b9cb9] transition">

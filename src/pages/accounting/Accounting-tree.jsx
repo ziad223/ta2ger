@@ -87,9 +87,12 @@ const AccountingTree = () => {
           {/* الهيدر */}
           <div className="bg-white shadow-lg rounded-lg p-5 flex items-center w-full justify-between">
             <div className='flex gap-4 items-center'>
-              <Link to='/accounting' className='bg-[#09adce] text-white text-xl p-2 rounded-lg'>
-                <FaChevronRight />
-              </Link>
+              <Link
+                              to="/accounting"
+                              className="bg-gray-500 rounded-lg p-2 text-white font-semibold cursor-pointer"
+                            >
+                              <FaChevronRight />
+                            </Link>
               <h2 className='text-xl'>شجرة الحسابات</h2>
             </div>
             <div className='flex gap-4 items-center'>

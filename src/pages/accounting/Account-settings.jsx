@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Container from '../../components/shared/Container';
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaChevronRight } from 'react-icons/fa';
 import CustomSelect from '../../components/shared/CustomSelect';
 import { Link } from 'react-router-dom';
 
@@ -117,10 +117,12 @@ const AccountSettings = () => {
         <div>
           <h2 className="text-xl font-bold">ادارة المحاسبة</h2>
           <div className="mt-8 flex items-center w-full justify-between">
-            <Link to = '/accounting' className="bg-slate-900 font-bold rounded-lg text-white p-4 h-[40px] cursor-pointer flex items-center justify-center gap-2">
-              <FaArrowLeft />
-              <span>العودة</span>
-            </Link>
+          <Link
+                          to="/accounting"
+                          className="bg-gray-500 rounded-lg p-2 text-white font-semibold cursor-pointer"
+                        >
+                          <FaChevronRight />
+                        </Link>
             <button
               className="bg-green-700 font-bold rounded-lg text-white p-4 h-[40px] cursor-pointer flex items-center justify-center gap-2"
               onClick={() => console.log('Saved Data:', rows)}

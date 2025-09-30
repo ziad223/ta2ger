@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import Container from '../../components/shared/Container';
 import CustomSelect from '../../components/shared/CustomSelect';
 import Table from '../../components/shared/Table';
-import { FaFileExcel, FaPrint } from 'react-icons/fa';
+import { FaChevronRight, FaFileExcel, FaPrint } from 'react-icons/fa';
 import * as XLSX from 'xlsx';
+import { Link } from 'react-router-dom';
 
 const TrialBalance = () => {
   const [selectedAccount, setSelectedAccount] = useState(null);
@@ -72,8 +73,16 @@ const TrialBalance = () => {
     <div className="my-20 min-h-screen">
       <Container>
         <div className="bg-white shadow-lg rounded-lg p-5">
-          <h2 className="text-xl font-bold mb-6">ميزان مراجعة الحسابات</h2>
+           <div className="flex items-center gap-3 mb-10">
+             <Link
+                          to="/accounting"
+                          className="bg-gray-500 rounded-lg p-2 text-white font-semibold cursor-pointer"
+                        >
+                          <FaChevronRight />
+                        </Link>
+          <h2 className="text-xl font-bold ">ميزان مراجعة الحسابات</h2>
 
+           </div>
           {/* الحقول + الأزرار */}
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end mb-10">
             {/* بحث بالحساب */}

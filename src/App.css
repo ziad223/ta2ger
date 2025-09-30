@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  overflow-x: hidden !important; 
+  font-family: 'Cairo', sans-serif !important;
+   background-color: #f7f6fe;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.rtl-editor .ql-editor {
+  direction: rtl;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 100%;
+  }
+
+  .some-element {
+    width: 100%;
+    padding: 0;
+  }
+}
+
+/* @font-face {
+    font-family: '29LT Bukra';
+    src: url('/public/fonts/29ltbukrabold.ttf') format('truetype');
+    font-weight: bold;
+  }
+  
+  @font-face {
+    font-family: '29LT Bukra';
+    src: url('/public/fonts/29ltbukralight.ttf') format('truetype');
+    font-weight: lighter;
+  }
+  
+  @font-face {
+    font-family: '29LT Bukra';
+    src: url('/public/fonts/29ltbukraregular.ttf') format('truetype');
+    font-weight: normal;
+  }
+
+
+  p * {
+    font-family: '29LT Bukra', sans-serif !important;
+  }
+ */

@@ -1,0 +1,1 @@
+export const base_url = 'https://app.ghasiq.sa/api'

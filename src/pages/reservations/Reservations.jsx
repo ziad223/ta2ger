@@ -8,7 +8,7 @@ import { MdOutlineNotInterested } from "react-icons/md";
 import { BiSolidFilePdf } from "react-icons/bi";
 import { TbReportMoney } from "react-icons/tb";
 import { PiNewspaperClippingThin } from "react-icons/pi";
-import { FaTrashAlt, FaEdit } from "react-icons/fa";
+import { FaTrashAlt, FaEdit, FaPrint } from "react-icons/fa";
 import { RiFilePaperLine } from "react-icons/ri";
 import { Link, Links } from "react-router-dom";
 import Container from "../../components/shared/Container";
@@ -442,12 +442,20 @@ const Reservations = () => {
               />
             </div>
 
-            <Link
+           <div className="flex gap-3">
+             <Link
             to='/new-booking'
               className="bg-[#2ba670] flex items-center justify-center text-white rounded-lg text-sm h-[40px] outline-none w-full max-w-[120px]"
             >
               إضافة حجز +
             </Link>
+            <div
+                  onClick={() => window.print()}
+                  className="bg-yellow-400 w-[40px] h-[40px] rounded-md text-white flex items-center justify-center cursor-pointer hover:bg-yellow-600 transition"
+                >
+                  <FaPrint size={20} />
+                </div>
+           </div>
           </div>
 
           <Table columns={columns} data={dataWithActions} />

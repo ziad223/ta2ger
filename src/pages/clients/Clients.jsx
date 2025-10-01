@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import Container from '../../components/shared/Container';
-import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { FaEdit, FaPrint, FaTrashAlt } from 'react-icons/fa';
 import Table from '../../components/shared/Table';
 
 import AddClientModal from './AddClientModal';
@@ -95,11 +95,18 @@ const Clients = () => {
             />
              <div className="flex gap-3 items-center">
               <div
+                    onClick={() => window.print()}
+                    className="bg-yellow-400 w-[40px] h-[40px] rounded-md text-white flex items-center justify-center cursor-pointer hover:bg-yellow-600 transition"
+                  >
+                    <FaPrint size={20} />
+                  </div>
+              <div
               className="bg-[#0dcaf0] flex items-center justify-center px-3 h-[35px] text-white rounded-md w-full md:w-auto"
             >
              عدد العملاء 
              <span>: 2</span>
             </div>
+
             <button
               onClick={() => setAddModalOpen(true)}
               className="bg-[#2ba670] px-3 h-[35px] text-white rounded-md w-full md:w-auto"

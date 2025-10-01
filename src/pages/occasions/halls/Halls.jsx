@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import Container from "../../../components/shared/Container";
 import Table from "../../../components/shared/Table";
-import { FaCalendar, FaEdit, FaTrashAlt } from "react-icons/fa";
+import { FaCalendar, FaEdit, FaPrint, FaTrashAlt } from "react-icons/fa";
 import AddHallModal from "./AddHallModal";
 import EditHallModal from "./EditHallModal";
 import DeleteHallModal from "./DeleteHallModal";
@@ -132,6 +132,12 @@ const Halls = () => {
               value={searchTerm}
             />
            <div className="flex gap-2">
+            <div
+                  onClick={() => window.print()}
+                  className="bg-yellow-400 w-[35px] h-[35px] rounded-md text-white flex items-center justify-center cursor-pointer hover:bg-yellow-600 transition"
+                >
+                  <FaPrint size={19} />
+                </div>
               <Link
               to='/reservations-schedule'
               onClick={() => setAddModalOpen(true)}

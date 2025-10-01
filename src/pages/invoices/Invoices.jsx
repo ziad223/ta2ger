@@ -5,7 +5,7 @@ import EditModal from "./EditModal";
 import DeleteModal from "./DeleteModal";
 import CustomSelect from "../../components/shared/CustomSelect";
 import AddInvoiceModal from "./AddInvoiceModal";
-import { FaEdit, FaRegEye, FaRegFileImage, FaTrashAlt } from "react-icons/fa";
+import { FaEdit, FaPrint, FaRegEye, FaRegFileImage, FaTrashAlt } from "react-icons/fa";
 import { MdOutlineFileUpload, MdOutlineNotInterested } from "react-icons/md";
 import { BiSolidFilePdf } from "react-icons/bi";
 import { TbReportMoney } from "react-icons/tb";
@@ -391,15 +391,29 @@ const Invoices = () => {
       <style>{customStyles}</style>
       <Container>
         <div className="p-4 min-h-screen my-10">
-          <div className="flex items-center w-full justify-between">
-            <h2 className="text-xl font-bold mb-4">الفواتير </h2>
-            <button
-              onClick={() => setAddModalOpen(true)}
-              className="bg-[#2ba670] text-white rounded-lg text-sm h-[40px] outline-none w-full max-w-[120px]"
-            >
-              إضافة فاتورة +
-            </button>
-          </div>
+          <div className="flex items-center w-full justify-between mb-5 no-print">
+  <h2 className="text-xl font-bold mb-4">الفواتير</h2>
+  <div className="flex gap-2">
+    <button
+      onClick={() => setAddModalOpen(true)}
+      className="bg-[#2ba670] text-white rounded-lg text-sm h-[40px] outline-none w-full max-w-[120px]"
+    >
+      إضافة فاتورة +
+    </button>
+    <div
+      onClick={() => window.print()}
+      className="bg-yellow-400 w-[60px] h-[40px] rounded-md text-white flex items-center justify-center cursor-pointer hover:bg-yellow-600 transition"
+    >
+      <FaPrint size={20} />
+    </div>
+  </div>
+</div>
+
+{/* المحتوى اللي يطبع */}
+<div className="print-area">
+  {/* الجدول / الفواتير هنا */}
+</div>
+
           <div className="bg-white p-4 rounded-lg shadow-lg">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-6 items-center">
               <input

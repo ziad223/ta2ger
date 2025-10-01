@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import { FaEdit, FaPrint, FaTrashAlt } from "react-icons/fa";
 import Table from "../../../../components/shared/Table";
 import AddSliderModal from "./AddSliderModal";
 import EditSliderModal from "./EditSliderModal";
@@ -11,13 +11,13 @@ const SliderTab = () => {
       id: 1,
       title: "عنوان السلايدر الأول",
       subtitle: "هذا النص هو العنوان الفرعي",
-      image: "https://via.placeholder.com/150",
+      image: "https://media.istockphoto.com/id/1394440950/photo/natural-view-cosmos-filed-and-sunset-on-garden-background.webp?b=1&s=612x612&w=0&k=20&c=o3n-h2j4aBnaDqKeY-876cTRm1DLOsZcCjcfDZf_9TQ=",
     },
     {
       id: 2,
       title: "عنوان السلايدر الثاني",
       subtitle: "نص فرعي للسلايدر الثاني",
-      image: "https://via.placeholder.com/150",
+      image: "https://img.freepik.com/free-photo/high-angle-spring-gerbera-flowers_23-2148894172.jpg?semt=ais_hybrid&w=740&q=80",
     },
   ]);
 
@@ -105,12 +105,20 @@ const SliderTab = () => {
   return (
     <div className="min-h-screen">
       <div className="bg-white shadow-sm  rounded-lg">
-        <button
+       <div className="flex items-center justify-between w-full">
+         <button
           onClick={() => setAddModalOpen(true)}
           className="bg-[#2ba670] px-4 h-[40px] text-white rounded-md w-full md:w-auto"
         >
           أضف سلايدر جديد +
         </button>
+        <div
+      onClick={() => window.print()}
+      className="bg-yellow-400 w-[40px] h-[40px] rounded-md text-white flex items-center justify-center cursor-pointer hover:bg-yellow-600 transition"
+    >
+      <FaPrint size={20} />
+    </div>
+       </div>
 
         <div className="mt-6">
           <Table columns={columns} data={dataWithActions} />

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import { FaEdit, FaPrint, FaTrashAlt } from "react-icons/fa";
 import Table from "../../../../components/shared/Table";
 import AddServiceModal from "./AddServiceModal";
 import EditServiceModal from "./EditServiceModal";
@@ -95,13 +95,20 @@ const ServicesTab = () => {
   return (
     <div className="p-4 min-h-screen">
       <div className="bg-white shadow-sm p-5 rounded-lg">
-        <button
+<div className="flex items-center justify-between">
+          <button
           onClick={() => setAddModalOpen(true)}
           className="bg-[#2ba670] px-4 h-[40px] text-white rounded-md w-full md:w-auto"
         >
           أضف خدمة جديدة +
         </button>
-
+<div
+      onClick={() => window.print()}
+      className="bg-yellow-400 w-[40px] h-[40px] rounded-md text-white flex items-center justify-center cursor-pointer hover:bg-yellow-600 transition"
+    >
+      <FaPrint size={20} />
+    </div>
+</div>
         <div className="mt-6">
           <Table columns={columns} data={dataWithActions} />
         </div>

@@ -1,20 +1,38 @@
 import React, { useState } from "react";
+import CustomSelect from "../../components/shared/CustomSelect";
+
 
 const AddEmployeeModal = ({ onClose, onSubmit }) => {
   const [form, setForm] = useState({
     name: "",
     phone: "",
     email: "",
-    group: "",
+    group: null, 
     halls: "",
   });
+
+  const groupOptions = [
+    { value: "hr", label: "الموارد البشرية" },
+    { value: "it", label: "تقنية المعلومات" },
+    { value: "sales", label: "المبيعات" },
+    { value: "marketing", label: "التسويق" },
+  ];
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleGroupChange = (selectedOption) => {
+    setForm({ ...form, group: selectedOption });
+  };
+
   const handleSubmit = () => {
-    onSubmit(form);
+    // نجهز البيانات بحيث نرسل value بدل object كامل
+    const formattedForm = {
+      ...form,
+      group: form.group ? form.group.value : "",
+    };
+    onSubmit(formattedForm);
     onClose();
   };
 
@@ -44,13 +62,15 @@ const AddEmployeeModal = ({ onClose, onSubmit }) => {
             placeholder="البريد الإلكتروني"
             className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <input
-            name="group"
+
+          {/* المجموعة - dropdown */}
+          <CustomSelect
+            options={groupOptions}
             value={form.group}
-            onChange={handleChange}
-            placeholder="المجموعة"
-            className="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            onChange={handleGroupChange}
+            placeholder="اختر المجموعة"
           />
+
           <input
             name="halls"
             value={form.halls}

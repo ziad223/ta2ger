@@ -37,7 +37,7 @@ const Accounting = () => {
                               كشف حساب عام</h2>
                             <AiOutlineAccountBook   className='text-[#17a2b8] text-4xl' />
                         </Link>
-                        <Link to='/' className='rounded-lg bg-[#f8f9fa] transition hover:scale-105 duration-300 cursor-pointer flex flex-col gap-3 lg:h-[130px] p-3 items-center justify-center'>
+                        <Link to='/tax-return' className='rounded-lg bg-[#f8f9fa] transition hover:scale-105 duration-300 cursor-pointer flex flex-col gap-3 lg:h-[130px] p-3 items-center justify-center'>
                             <h2 className='font-bold text-xl'>
                                  الاقرار الضريبي</h2>
                             <IoDocumentText className='text-[#17a2b8] text-4xl' />

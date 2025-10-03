@@ -49,6 +49,7 @@ import AccountingTree from './pages/accounting/Accounting-tree';
 import TrialBalance from './pages/accounting/TrialBalance';
 import Restrictions from './pages/accounting/Restrictions';
 import IncomeStatement from './pages/accounting/IncomeStatment';
+import TaxReturn from './pages/accounting/TaxReturn';
 
 
 const AppContent = () => {
@@ -114,6 +115,7 @@ const AppContent = () => {
           <Route path='/account-statement' element={<ProtectedRoute><AccountStatement /></ProtectedRoute>} />
           <Route path='/trial-balance' element={<ProtectedRoute><TrialBalance /></ProtectedRoute>} />
           <Route path='/income-statement' element={<ProtectedRoute><IncomeStatement /></ProtectedRoute>} />
+          <Route path='/tax-return' element={<ProtectedRoute><TaxReturn /></ProtectedRoute>} />
         </Routes>
       </Suspense>
       {!hideFooter && <Footer />}

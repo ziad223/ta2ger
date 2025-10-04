@@ -6,6 +6,7 @@ import { FiMenu } from "react-icons/fi";
 import ToolBar from './ToolBar';
 import Container from '../shared/Container';
 import { FaBarsProgress } from 'react-icons/fa6';
+import { VscReport } from "react-icons/vsc";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -53,7 +54,8 @@ const Navbar = () => {
                 { to: '/reservations', label: 'الحجوزات', icon: <FaFileAlt size={18} /> },
                 { to: '/invoices', label: 'الفواتير', icon: <FaChartLine size={18} /> },
                 { to: '/new-invoices', label: 'الفواتير المبسطة', icon: <FaMoneyBill size={18} /> },
-                { to: '/accounting', label: 'التقارير والمحاسبة', icon: <FaBarsProgress size={18} /> },
+                { to: '/reports', label: 'التقارير', icon: <VscReport   size={18} /> },
+                { to: '/accounting', label: ' المحاسبة', icon: <FaBarsProgress size={18} /> },
                 { to: '/photo-gallery', label: 'المعرض', icon: <FaFileSignature size={18} /> },
                 { to: '/alerts', label: 'التنبيهات', icon: <IoMdNotifications size={20} /> },
               ].map((item, index) => (

@@ -388,75 +388,78 @@ const Reservations = () => {
 
         <div className="bg-white p-4 rounded-lg shadow-lg">
           {/* فلاتر البحث */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-6 items-center">
-            <CustomSelect
-              name="eventType"
-              value={eventType ? { value: eventType, label: eventType } : null}
-              onChange={(selected) =>
-                setEventType(selected ? selected.value : "")
-              }
-              options={[
-                { value: "", label: "كل المناسبات" },
-                { value: "زفاف", label: "زفاف" },
-                { value: "تخرج", label: "تخرج" },
-                { value: "اجتماع", label: "اجتماع" },
-              ]}
-              placeholder="كل المناسبات"
-              className="text-sm"
-            />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-6 items-center w-full">
+  {/* نوع المناسبة */}
+  <CustomSelect
+    name="eventType"
+    value={eventType ? { value: eventType, label: eventType } : null}
+    onChange={(selected) => setEventType(selected ? selected.value : "")}
+    options={[
+      { value: "", label: "كل المناسبات" },
+      { value: "زفاف", label: "زفاف" },
+      { value: "تخرج", label: "تخرج" },
+      { value: "اجتماع", label: "اجتماع" },
+    ]}
+    placeholder="كل المناسبات"
+    className="text-sm w-full"
+  />
 
-            <input
-              type="text"
-              value={searchId}
-              onChange={(e) => setSearchId(e.target.value)}
-              placeholder="بحث برقم الحجز"
-              className="border h-[40px] outline-none px-3 rounded-lg text-sm w-full"
-            />
+  {/* البحث برقم الحجز */}
+  <input
+    type="text"
+    value={searchId}
+    onChange={(e) => setSearchId(e.target.value)}
+    placeholder="بحث برقم الحجز"
+    className="border h-[40px] outline-none px-3 rounded-lg text-sm w-full"
+  />
 
-            <CustomSelect
-              name="owner"
-              value={owner ? { value: owner, label: owner } : null}
-              onChange={(selected) => setOwner(selected ? selected.value : "")}
-              options={[
-                { value: "", label: "اختر كواكب التقنية" },
-                { value: "نبيل 1", label: "نبيل 1" },
-                { value: "نبيل 2", label: "نبيل 2" },
-              ]}
-              placeholder="اختر كواكب التقنية"
-              className="text-sm"
-            />
+  {/* المالك */}
+  <CustomSelect
+    name="owner"
+    value={owner ? { value: owner, label: owner } : null}
+    onChange={(selected) => setOwner(selected ? selected.value : "")}
+    options={[
+      { value: "", label: "اختر كواكب التقنية" },
+      { value: "نبيل 1", label: "نبيل 1" },
+      { value: "نبيل 2", label: "نبيل 2" },
+    ]}
+    placeholder="اختر كواكب التقنية"
+    className="text-sm w-full"
+  />
 
-            {/* التاريخ ياخد عمودين */}
-            <div className="flex gap-2 col-span-2">
-              <input
-                type="date"
-                value={dateFrom}
-                onChange={(e) => setDateFrom(e.target.value)}
-                className="border h-[40px] outline-none px-2 rounded-lg text-sm w-full"
-              />
-              <input
-                type="date"
-                value={dateTo}
-                onChange={(e) => setDateTo(e.target.value)}
-                className="border h-[40px] outline-none px-2 rounded-lg text-sm w-full"
-              />
-            </div>
+  {/* التاريخين ياخدوا صفين على الشاشات الصغيرة */}
+  <div className="flex flex-col sm:flex-row gap-2 col-span-1 sm:col-span-2 w-full">
+    <input
+      type="date"
+      value={dateFrom}
+      onChange={(e) => setDateFrom(e.target.value)}
+      className="border h-[40px] outline-none px-2 rounded-lg text-sm w-full"
+    />
+    <input
+      type="date"
+      value={dateTo}
+      onChange={(e) => setDateTo(e.target.value)}
+      className="border h-[40px] outline-none px-2 rounded-lg text-sm w-full"
+    />
+  </div>
 
-           <div className="flex gap-3">
-             <Link
-            to='/new-booking'
-              className="bg-[#2ba670] flex items-center justify-center text-white rounded-lg text-sm h-[40px] outline-none w-full max-w-[120px]"
-            >
-              إضافة حجز +
-            </Link>
-            <div
-                  onClick={() => window.print()}
-                  className="bg-yellow-400 w-[40px] h-[40px] rounded-md text-white flex items-center justify-center cursor-pointer hover:bg-yellow-600 transition"
-                >
-                  <FaPrint size={20} />
-                </div>
-           </div>
-          </div>
+  {/* الأزرار */}
+  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full col-span-1">
+    <Link
+      to="/new-booking"
+      className="bg-[#2ba670] px-2 flex items-center justify-center text-white rounded-lg text-sm h-[40px] w-full sm:w-auto"
+    >
+      إضافة حجز +
+    </Link>
+    <div
+      onClick={() => window.print()}
+      className="bg-yellow-400 w-full sm:w-[40px] h-[40px] rounded-md text-white flex items-center justify-center cursor-pointer hover:bg-yellow-600 transition"
+    >
+      <FaPrint size={20} />
+    </div>
+  </div>
+</div>
+
 
           <Table columns={columns} data={dataWithActions} />
         </div>

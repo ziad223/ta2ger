@@ -145,18 +145,21 @@ const handlePrint = () => {
   return (
     <Container>
       <div className="p-4 min-h-screen my-10">
-      <div className="flex items-center justify-between w-full">
-  <h2 className="text-xl font-bold mb-4">الفواتير المبسطة</h2>
-  <div className="flex gap-2">
+<div className="flex flex-col sm:flex-row sm:items-center mb-5 sm:justify-between w-full gap-3 sm:gap-0">
+  <h2 className="text-xl font-bold  text-center sm:text-right">
+    الفواتير المبسطة
+  </h2>
+
+  <div className="flex xs:flex-row sm:flex-row gap-2 w-full   sm:w-auto justify-center sm:justify-end">
     <button
       onClick={handlePrint}
-      className="bg-yellow-500 px-3 h-[35px] text-white rounded-md"
+      className="bg-yellow-500 px-3 h-[35px] text-white rounded-md flex items-center justify-center w-full text-center mx-auto"
     >
-      <FaPrint/>
+      <FaPrint />
     </button>
     <button
       onClick={() => setIsAddModalOpen(true)}
-      className="bg-[#2ba670] px-3 h-[35px] text-white rounded-md"
+      className="bg-[#2ba670] px-3 h-[35px] lg:w-[250px] text-white rounded-md w-full sm:w-auto"
     >
       أضف فاتورة +
     </button>

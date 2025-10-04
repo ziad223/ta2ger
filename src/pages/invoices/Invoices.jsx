@@ -409,79 +409,82 @@ const Invoices = () => {
   </div>
 </div>
 
-{/* المحتوى اللي يطبع */}
 <div className="print-area">
-  {/* الجدول / الفواتير هنا */}
 </div>
 
           <div className="bg-white p-4 rounded-lg shadow-lg">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-6 items-center">
-              <input
-                type="text"
-                value={searchClientOrHall}
-                onChange={(e) => setSearchClientOrHall(e.target.value)}
-                placeholder="بحث عن عميل أو قاعة"
-                className="border h-[40px] px-3 rounded-lg text-sm w-full outline-none"
-              />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 mb-6 items-center w-full">
+  {/* مربع البحث */}
+  <input
+    type="text"
+    value={searchClientOrHall}
+    onChange={(e) => setSearchClientOrHall(e.target.value)}
+    placeholder="بحث عن عميل أو قاعة"
+    className="border h-[40px] px-3 rounded-lg text-sm w-full outline-none"
+  />
 
-              <div className="flex gap-2 col-span-2">
-                <input
-                  type="date"
-                  value={dateFrom}
-                  onChange={(e) => setDateFrom(e.target.value)}
-                  className="border h-[40px] px-2 rounded-lg text-sm w-full outline-none"
-                />
-                <input
-                  type="date"
-                  value={dateTo}
-                  onChange={(e) => setDateTo(e.target.value)}
-                  className="border h-[40px] px-2 rounded-lg text-sm w-full outline-none"
-                />
-              </div>
+  {/* التاريخين */}
+  <div className="flex flex-col sm:flex-row gap-2 col-span-1 sm:col-span-2 w-full">
+    <input
+      type="date"
+      value={dateFrom}
+      onChange={(e) => setDateFrom(e.target.value)}
+      className="border h-[40px] px-2 rounded-lg text-sm w-full outline-none"
+    />
+    <input
+      type="date"
+      value={dateTo}
+      onChange={(e) => setDateTo(e.target.value)}
+      className="border h-[40px] px-2 rounded-lg text-sm w-full outline-none"
+    />
+  </div>
 
-              <CustomSelect
-                value={
-                  paymentStatusFilter
-                    ? { label: paymentStatusFilter, value: paymentStatusFilter }
-                    : null
-                }
-                onChange={(selected) =>
-                  setPaymentStatusFilter(selected ? selected.value : "")
-                }
-                options={[
-                  { value: "", label: "كل حالات الفاتورة" },
-                  { value: "مدفوعة", label: "مدفوعة" },
-                  { value: "مدفوعة جزئيا", label: "مدفوعة جزئيا" },
-                  { value: "غير مدفوعة", label: "غير مدفوعة" },
-                ]}
-                className="text-sm w-full md:w-[200px]"
-                placeholder="كل حالات الفاتورة"
-              />
+  {/* حالة الفاتورة */}
+  <CustomSelect
+    value={
+      paymentStatusFilter
+        ? { label: paymentStatusFilter, value: paymentStatusFilter }
+        : null
+    }
+    onChange={(selected) =>
+      setPaymentStatusFilter(selected ? selected.value : "")
+    }
+    options={[
+      { value: "", label: "كل حالات الفاتورة" },
+      { value: "مدفوعة", label: "مدفوعة" },
+      { value: "مدفوعة جزئيا", label: "مدفوعة جزئيا" },
+      { value: "غير مدفوعة", label: "غير مدفوعة" },
+    ]}
+    className="text-sm w-full md:w-[200px]"
+    placeholder="كل حالات الفاتورة"
+  />
 
-              <div className="lg:mr-[25px]">
-                <CustomSelect
-                  value={
-                    reservationStatusFilter
-                      ? {
-                          label: reservationStatusFilter,
-                          value: reservationStatusFilter,
-                        }
-                      : null
-                  }
-                  onChange={(selected) =>
-                    setReservationStatusFilter(selected ? selected.value : "")
-                  }
-                  options={[
-                    { value: "", label: "كل حالات الحجز" },
-                    { value: "مؤكد", label: "مؤكد" },
-                    { value: "ملغي", label: "ملغي" },
-                    { value: "قيد الانتظار", label: "قيد الانتظار" },
-                  ]}
-                  className="text-sm w-full md:w-[200px] ml-3" // المسافة بين السيلكتين
-                  placeholder="كل حالات الحجز"
-                />
-              </div>
-            </div>
+  {/* حالة الحجز */}
+  <div className="lg:mr-[25px] w-full">
+    <CustomSelect
+      value={
+        reservationStatusFilter
+          ? {
+              label: reservationStatusFilter,
+              value: reservationStatusFilter,
+            }
+          : null
+      }
+      onChange={(selected) =>
+        setReservationStatusFilter(selected ? selected.value : "")
+      }
+      options={[
+        { value: "", label: "كل حالات الحجز" },
+        { value: "مؤكد", label: "مؤكد" },
+        { value: "ملغي", label: "ملغي" },
+        { value: "قيد الانتظار", label: "قيد الانتظار" },
+      ]}
+      className="text-sm w-full md:w-[200px] md:ml-3"
+      placeholder="كل حالات الحجز"
+    />
+  </div>
+</div>
+
 
             {/* جدول الحجوزات */}
             <Table columns={columns} data={dataWithActions} />

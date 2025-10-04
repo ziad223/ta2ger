@@ -83,10 +83,10 @@ const PhotoGallery = () => {
   return (
     <Container>
       <div className="p-4 min-h-screen my-10">
-        <div className="flex items-center justify-between w-full">
-          <h2 className="text-xl font-bold mb-4">معرض الصور</h2>
+        <div className="flex items-center justify-between w-ful mb-5">
+          <h2 className="text-xl font-bold ">معرض الصور</h2>
           <button
-            onClick={() => setIsAddModalOpen(true)}
+onClick={() => setAddModalOpen(true)}
             className="bg-[#2ba670] px-3 h-[35px] text-white rounded-md"
           >
             أضف صورة +

@@ -110,20 +110,21 @@ const Occasions = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               value={searchTerm}
             />
-            <div className="flex items-center gap-2">
-              <Link
-                to="/halls"
-                className="bg-blue-600 hover:bg-blue-500 transition duration-300 px-5 flex items-center justify-center h-[35px] text-white rounded-md w-full md:w-auto"
-              >
-                القاعات
-              </Link>
-              <button
-                onClick={() => setAddModalOpen(true)}
-                className="bg-[#2ba670] px-3 h-[35px] text-white rounded-md w-full md:w-auto"
-              >
-                أضف مناسبة +
-              </button>
-            </div>
+          <div className="flex flex-col items-center gap-2 w-full">
+  <Link
+    to="/halls"
+    className="bg-blue-600 hover:bg-blue-500 transition duration-300 px-5 flex items-center justify-center h-[40px] text-white rounded-md w-full"
+  >
+    القاعات
+  </Link>
+  <button
+    onClick={() => setAddModalOpen(true)}
+    className="bg-[#2ba670] px-5 h-[40px] text-white rounded-md w-full"
+  >
+    أضف مناسبة +
+  </button>
+</div>
+
           </div>
 
           <Table columns={columns} data={dataWithActions} />

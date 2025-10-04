@@ -27,7 +27,6 @@ const AddServiceModal = ({ isOpen, onClose, onAdd }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // نمرر الـ value الحقيقي بس
     const formattedData = {
       ...form,
       enableQty: form.enableQty?.value,
@@ -38,15 +37,21 @@ const AddServiceModal = ({ isOpen, onClose, onAdd }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-      <div className="bg-white w-full max-w-3xl p-6 rounded outline-none-lg shadow-lg">
-        <h2 className="text-xl font-bold mb-4">إضافة خدمة جديدة</h2>
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-3 sm:p-5">
+      <div className="bg-white w-full max-w-3xl p-4 sm:p-6 rounded shadow-lg overflow-y-auto max-h-[90vh]">
+        <h2 className="text-lg sm:text-xl font-bold mb-4 text-center sm:text-right">
+          إضافة خدمة جديدة
+        </h2>
+
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 md:grid-cols-2 gap-3"
+        >
           <input
             type="text"
             name="image"
             placeholder="رابط صورة الخدمة"
-            className="border p-2 w-full rounded outline-none"
+            className="border p-2 w-full rounded outline-none text-sm sm:text-base"
             value={form.image}
             onChange={handleChange}
           />
@@ -54,7 +59,7 @@ const AddServiceModal = ({ isOpen, onClose, onAdd }) => {
             type="text"
             name="name"
             placeholder="اسم الخدمة"
-            className="border p-2 w-full rounded outline-none"
+            className="border p-2 w-full rounded outline-none text-sm sm:text-base"
             value={form.name}
             onChange={handleChange}
           />
@@ -62,7 +67,7 @@ const AddServiceModal = ({ isOpen, onClose, onAdd }) => {
             type="text"
             name="category"
             placeholder="القسم"
-            className="border p-2 w-full rounded outline-none"
+            className="border p-2 w-full rounded outline-none text-sm sm:text-base"
             value={form.category}
             onChange={handleChange}
           />
@@ -70,7 +75,7 @@ const AddServiceModal = ({ isOpen, onClose, onAdd }) => {
             type="number"
             name="purchasePrice"
             placeholder="سعر الشراء"
-            className="border p-2 w-full rounded  outline-none"
+            className="border p-2 w-full rounded outline-none text-sm sm:text-base"
             value={form.purchasePrice}
             onChange={handleChange}
           />
@@ -78,12 +83,11 @@ const AddServiceModal = ({ isOpen, onClose, onAdd }) => {
             type="number"
             name="salePrice"
             placeholder="سعر البيع"
-            className="border p-2 w-full rounded outline-none"
+            className="border p-2 w-full rounded outline-none text-sm sm:text-base"
             value={form.salePrice}
             onChange={handleChange}
           />
 
-          {/* استبدال select العادية بـ CustomSelect */}
           <CustomSelect
             name="enableQty"
             options={[
@@ -99,7 +103,7 @@ const AddServiceModal = ({ isOpen, onClose, onAdd }) => {
             type="number"
             name="quantity"
             placeholder="الكمية"
-            className="border p-2 w-full rounded outline-none"
+            className="border p-2 w-full rounded outline-none text-sm sm:text-base"
             value={form.quantity}
             onChange={handleChange}
           />
@@ -107,7 +111,7 @@ const AddServiceModal = ({ isOpen, onClose, onAdd }) => {
             type="text"
             name="barcode"
             placeholder="الباركود"
-            className="border p-2 w-full rounded outline-none"
+            className="border p-2 w-full rounded outline-none text-sm sm:text-base"
             value={form.barcode}
             onChange={handleChange}
           />
@@ -115,12 +119,11 @@ const AddServiceModal = ({ isOpen, onClose, onAdd }) => {
             type="text"
             name="unit"
             placeholder="الوحدة"
-            className="border p-2 w-full rounded outline-none"
+            className="border p-2 w-full rounded outline-none text-sm sm:text-base"
             value={form.unit}
             onChange={handleChange}
           />
 
-          {/* استبدال select العادية بـ CustomSelect */}
           <CustomSelect
             name="isDefault"
             options={[
@@ -133,17 +136,17 @@ const AddServiceModal = ({ isOpen, onClose, onAdd }) => {
           />
 
           {/* الأزرار */}
-          <div className="flex justify-end gap-3 mt-4 md:col-span-2">
+          <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 mt-4 md:col-span-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-300 rounded outline-none"
+              className="px-4 py-2 bg-gray-300 rounded outline-none text-sm sm:text-base w-full sm:w-auto"
             >
               إلغاء
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-green-600 text-white rounded outline-none"
+              className="px-4 py-2 bg-green-600 text-white rounded outline-none text-sm sm:text-base w-full sm:w-auto"
             >
               إضافة
             </button>

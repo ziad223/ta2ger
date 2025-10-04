@@ -95,7 +95,7 @@ const ServicesTab = () => {
   return (
     <div className="p-4 min-h-screen">
       <div className="bg-white shadow-sm p-5 rounded-lg">
-<div className="flex items-center justify-between">
+<div className="flex items-center gap-2 lg:gap-0 justify-between">
           <button
           onClick={() => setAddModalOpen(true)}
           className="bg-[#2ba670] px-4 h-[40px] text-white rounded-md w-full md:w-auto"
@@ -104,7 +104,7 @@ const ServicesTab = () => {
         </button>
 <div
       onClick={() => window.print()}
-      className="bg-yellow-400 w-[40px] h-[40px] rounded-md text-white flex items-center justify-center cursor-pointer hover:bg-yellow-600 transition"
+      className="bg-yellow-400 lg:w-[40px] w-[50px] h-[40px] rounded-md text-white flex items-center justify-center cursor-pointer hover:bg-yellow-600 transition"
     >
       <FaPrint size={20} />
     </div>

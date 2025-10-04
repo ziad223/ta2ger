@@ -131,28 +131,31 @@ const Halls = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               value={searchTerm}
             />
-           <div className="flex gap-2">
-            <div
-                  onClick={() => window.print()}
-                  className="bg-yellow-400 w-[35px] h-[35px] rounded-md text-white flex items-center justify-center cursor-pointer hover:bg-yellow-600 transition"
-                >
-                  <FaPrint size={19} />
-                </div>
-              <Link
-              to='/reservations-schedule'
-              onClick={() => setAddModalOpen(true)}
-              className="bg-[#0dcaf0] flex items-center gap-2 px-3 h-[35px] text-white rounded-md w-full md:w-auto"
-            >
-              <FaCalendar/>
-             جدول الحجوزات
-            </Link>
-            <button
-              onClick={() => setAddModalOpen(true)}
-              className="bg-[#2ba670] px-3 h-[35px] text-white rounded-md w-full md:w-auto"
-            >
-              أضف قاعة +
-            </button>
-           </div>
+          <div className="flex flex-col md:flex-row gap-2 w-full">
+  <div
+    onClick={() => window.print()}
+    className="bg-yellow-400 w-full md:w-[35px] h-[35px] rounded-md text-white flex items-center justify-center cursor-pointer hover:bg-yellow-600 transition"
+  >
+    <FaPrint size={19} />
+  </div>
+
+  <Link
+    to="/reservations-schedule"
+    onClick={() => setAddModalOpen(true)}
+    className="bg-[#0dcaf0] flex items-center justify-center gap-2 px-3 h-[35px] text-white rounded-md w-full md:w-auto rounded-md"
+  >
+    <FaCalendar />
+    جدول الحجوزات
+  </Link>
+
+  <button
+    onClick={() => setAddModalOpen(true)}
+    className="bg-[#2ba670] px-3 h-[35px] text-white rounded-md w-full md:w-auto"
+  >
+    أضف قاعة +
+  </button>
+</div>
+
           </div>
 
           <Table columns={columns} data={dataWithActions} />

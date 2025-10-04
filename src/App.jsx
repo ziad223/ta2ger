@@ -46,10 +46,17 @@ import Accounting from './pages/accounting/Accounting';
 import AccountSettings from './pages/accounting/Account-settings';
 import AccountingTree from './pages/accounting/Accounting-tree';
  import AccountStatement from './pages/accounting/AccountStatement';
+ import AccountStatements from './pages/report/AccountStatements';
 import TrialBalance from './pages/accounting/TrialBalance';
 import Restrictions from './pages/accounting/Restrictions';
 import IncomeStatement from './pages/accounting/IncomeStatment';
 import TaxReturn from './pages/accounting/TaxReturn';
+import Report from './pages/report/Report';
+import EmployeeReport from './pages/report/EmployeeReport';
+import Expenses from './pages/report/Expenses';
+import FinancialAdvance from './pages/report/FinancialAdvance';
+import ClientReport from './pages/report/ClientReport';
+import HallsReport from './pages/report/HallsReport';
 
 
 const AppContent = () => {
@@ -116,6 +123,13 @@ const AppContent = () => {
           <Route path='/trial-balance' element={<ProtectedRoute><TrialBalance /></ProtectedRoute>} />
           <Route path='/income-statement' element={<ProtectedRoute><IncomeStatement /></ProtectedRoute>} />
           <Route path='/tax-return' element={<ProtectedRoute><TaxReturn /></ProtectedRoute>} />
+          <Route path='/report' element={<ProtectedRoute><Report /></ProtectedRoute>} />
+          <Route path='/report/account-statements' element={<ProtectedRoute><AccountStatements /></ProtectedRoute>} />
+          <Route path='/report/employee-report' element={<ProtectedRoute><EmployeeReport /></ProtectedRoute>} />
+          <Route path='/report/expenses' element={<ProtectedRoute><Expenses /></ProtectedRoute>} />
+          <Route path='/report/financial-advance' element={<ProtectedRoute><FinancialAdvance /></ProtectedRoute>} />
+          <Route path='/report/client-report' element={<ProtectedRoute><ClientReport /></ProtectedRoute>} />
+          <Route path='/report/halls-report' element={<ProtectedRoute><HallsReport /></ProtectedRoute>} />
         </Routes>
       </Suspense>
       {!hideFooter && <Footer />}

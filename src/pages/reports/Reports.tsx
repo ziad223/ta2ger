@@ -3,6 +3,7 @@ import { FiSearch, FiDownload } from "react-icons/fi";
 import ReportCard from "./ReportCard";
 import ReportModal from "./ReportModal";
 import DonutChart from "./DonutChart";
+import Container from "../../components/shared/Container";
 
 const sampleReports = [
   { id: "r1", title: "كشف حساب عام", desc: "ملخص الحسابات العامة", icon: "FiFileText" },
@@ -22,8 +23,8 @@ export default function Reports() {
   );
 
   return (
-    <div className="p-6 min-h-screen my-10 bg-gray-50">
-      {/* Header */}
+    <Container>
+    <div className="min-h-screen my-10 bg-gray-50">
       <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-800">التقارير</h1>
@@ -96,5 +97,6 @@ export default function Reports() {
       {/* Modal */}
       <ReportModal openReport={openReport} onClose={() => setOpenReport(null)} />
     </div>
+    </Container>
   );
 }

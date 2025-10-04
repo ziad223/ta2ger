@@ -54,7 +54,7 @@ const Navbar = () => {
                 { to: '/reservations', label: 'الحجوزات', icon: <FaFileAlt size={18} /> },
                 { to: '/invoices', label: 'الفواتير', icon: <FaChartLine size={18} /> },
                 { to: '/new-invoices', label: 'الفواتير المبسطة', icon: <FaMoneyBill size={18} /> },
-                { to: '/reports', label: 'التقارير', icon: <VscReport   size={18} /> },
+                { to: '/report', label: 'التقارير', icon: <VscReport   size={18} /> },
                 { to: '/accounting', label: ' المحاسبة', icon: <FaBarsProgress size={18} /> },
                 { to: '/photo-gallery', label: 'المعرض', icon: <FaFileSignature size={18} /> },
                 { to: '/alerts', label: 'التنبيهات', icon: <IoMdNotifications size={20} /> },

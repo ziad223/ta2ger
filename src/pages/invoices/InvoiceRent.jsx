@@ -98,7 +98,7 @@ const InvoiceRent = () => {
             <button
               type="button"
               onClick={() => window.print()}
-              className="flex items-center gap-2 bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full sm:w-auto justify-center"
+              className="flex items-center gap-2 bg-yellow-500 text-white px-4 py-2 rounded-md  w-full sm:w-auto justify-center"
             >
               <span>طباعة</span>
               <span className="text-sm">

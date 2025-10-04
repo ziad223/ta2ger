@@ -7,6 +7,7 @@ import EditEventModal from "./EditEventModal";
 import DeleteEventModal from "./DeleteEventModal";
 import { Link } from "react-router-dom";
 import SwitchToggle from "./SwitchToggle";
+import { CiEdit } from "react-icons/ci";
 
 const Occasions = () => {
   const [events, setEvents] = useState([
@@ -61,9 +62,9 @@ const Occasions = () => {
             setSelectedEvent(event);
             setEditModalOpen(true);
           }}
-          className="text-white bg-[#0dcaf0] w-[30px] h-[30px] rounded flex items-center justify-center"
-        >
-          <FaEdit size={16} />
+           className="text-white text-xs bg-gradient-to-r from-[#0dcaf0] to-[#09a5cc] w-[30px] h-[30px] rounded-md flex items-center justify-center shadow-md hover:scale-110 hover:shadow-lg transition-transform duration-200"
+                >
+           <CiEdit  size={24} />
         </button>
         <button
           onClick={() => {
@@ -110,16 +111,17 @@ const Occasions = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               value={searchTerm}
             />
-          <div className="flex flex-col items-center gap-2 w-full">
+          <div className="flex flex-col md:flex-row items-center  gap-2 ">
   <Link
     to="/halls"
-    className="bg-blue-600 hover:bg-blue-500 transition duration-300 px-5 flex items-center justify-center h-[40px] text-white rounded-md w-full"
+    className="bg-blue-600 hover:bg-blue-500 transition duration-300 px-5 flex items-center justify-center h-[40px] text-white rounded-md w-full md:w-auto text-center"
   >
     القاعات
   </Link>
+
   <button
     onClick={() => setAddModalOpen(true)}
-    className="bg-[#2ba670] px-5 h-[40px] text-white rounded-md w-full"
+    className="bg-[#2ba670] hover:bg-[#24945c] transition duration-300 px-5 h-[40px] text-white rounded-md w-full md:w-auto text-center"
   >
     أضف مناسبة +
   </button>

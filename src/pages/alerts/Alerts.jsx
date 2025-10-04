@@ -4,6 +4,7 @@ import Table from "../../components/shared/Table";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import EditAlertModal from "./EditAlertModal";
 import DeleteAlertModal from "./DeleteAlertModal";
+import { CiEdit } from "react-icons/ci";
 
 const Alerts = () => {
   const [searchClient, setSearchClient] = useState("");
@@ -80,9 +81,9 @@ const Alerts = () => {
             setSelectedAlert(a);
             setEditModalOpen(true);
           }}
-          className="bg-[#0dcaf0] text-white rounded-sm w-[30px] h-[30px] flex items-center justify-center"
-        >
-          <FaEdit size={18} />
+           className="text-white text-xs bg-gradient-to-r from-[#0dcaf0] to-[#09a5cc] w-[30px] h-[30px] rounded-md flex items-center justify-center shadow-md hover:scale-110 hover:shadow-lg transition-transform duration-200"
+          >
+            <CiEdit  size={24} />
         </button>
         <button
           onClick={() => {

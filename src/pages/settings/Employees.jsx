@@ -6,6 +6,7 @@ import AddEmployeeModal from './AddEmployeeModal';
 import EditEmployeeModal from './EditEmployeeModal';
 import DeleteEmployeeModal from './DeleteEmployeeModal';
 import { Link } from 'react-router-dom';
+import { CiEdit } from 'react-icons/ci';
 
 const Employees = () => {
   const [clients, setClients] = useState([
@@ -64,9 +65,9 @@ const Employees = () => {
             setSelectedClient(client);
             setEditModalOpen(true);
           }}
-          className="text-white text-xs bg-[#0dcaf0] w-[30px] h-[30px] rounded-sm flex items-center justify-center"
+          className="text-white text-xs bg-gradient-to-r from-[#0dcaf0] to-[#09a5cc] w-[30px] h-[30px] rounded-md flex items-center justify-center shadow-md hover:scale-110 hover:shadow-lg transition-transform duration-200"
         >
-          <FaEdit size={16} />
+          <CiEdit size={24} />
         </button>
         <button
           onClick={() => {
@@ -105,27 +106,27 @@ const Employees = () => {
   return (
     <Container>
       <div className="p-4 my-10 min-h-screen">
-                <div className='flex items-center flex-col lg:flex-row  justify-between w-full '>
-        <h2 className="text-xl font-bold">الموظفين</h2>
-         <div className='flex items-center gap-2 flex-col lg:flex-row'>
+        <div className='flex items-center flex-col lg:flex-row  justify-between w-full '>
+          <h2 className="text-xl font-bold">الموظفين</h2>
+          <div className='flex items-center gap-2 flex-col lg:flex-row'>
             <Link to='/settings/employees' className='flex items-center  gap-2 px-3 h-[35px] rounded-lg bg-[#17a2b8] text-white'>
-                <span>الموظفين</span>
-                <FaUsers/>
+              <span>الموظفين</span>
+              <FaUsers />
             </Link>
-             <Link to = '/settings/sections' className='flex items-center gap-2 px-3 h-[35px] rounded-lg bg-[#17a2b8] text-white'>
-                <span>الأقسام</span>
-                <FaBuffer/>
+            <Link to='/settings/sections' className='flex items-center gap-2 px-3 h-[35px] rounded-lg bg-[#17a2b8] text-white'>
+              <span>الأقسام</span>
+              <FaBuffer />
             </Link>
             <Link to='/settings/privacy-policy' className='flex items-center gap-2 px-3 h-[35px] rounded-lg bg-[#17a2b8] text-white'>
-                <span>سياسة الخصوصية</span>
-                <FaUserShield/>
+              <span>سياسة الخصوصية</span>
+              <FaUserShield />
             </Link>
             <Link to='/settings/pay-ways' className='flex items-center gap-2 px-3 h-[35px] rounded-lg bg-[#17a2b8] text-white'>
-                <span>طرق الدفع</span>
-                <FaCreditCard/>
+              <span>طرق الدفع</span>
+              <FaCreditCard />
             </Link>
           </div>
-          </div>
+        </div>
         <div className="bg-white mt-5 shadow-sm p-5 rounded-lg">
           <div className="flex flex-col md:flex-row items-center justify-between w-full gap-3 md:gap-0">
             <input

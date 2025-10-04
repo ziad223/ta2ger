@@ -4,6 +4,7 @@ import Table from "../../../../components/shared/Table";
 import AddSliderModal from "./AddSliderModal";
 import EditSliderModal from "./EditSliderModal";
 import DeleteSliderModal from "./DeleteSliderModal";
+import { CiEdit } from "react-icons/ci";
 
 const SliderTab = () => {
   const [sliders, setSliders] = useState([
@@ -62,9 +63,9 @@ const SliderTab = () => {
             setSelectedSlider(slider);
             setEditModalOpen(true);
           }}
-          className="text-white text-xs bg-[#0dcaf0] w-[30px] h-[30px] rounded-sm flex items-center justify-center"
-        >
-          <FaEdit size={16} />
+          className="text-white text-xs bg-gradient-to-r from-[#0dcaf0] to-[#09a5cc] w-[30px] h-[30px] rounded-md flex items-center justify-center shadow-md hover:scale-110 hover:shadow-lg transition-transform duration-200"
+         >
+           <CiEdit  size={24} />
         </button>
         <button
           onClick={() => {

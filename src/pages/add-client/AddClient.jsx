@@ -6,6 +6,7 @@ import Table from '../../components/shared/Table'
 import AddClientModal from './AddClientModal';
 import EditClientModal from './EditClientModal';
 import DeleteClientModal from './DeleteClientModal';
+import { CiEdit } from 'react-icons/ci';
 
 const AddClient = () => {
   const [clients, setClients] = useState([
@@ -67,9 +68,9 @@ const AddClient = () => {
             setSelectedClient(client);
             setEditModalOpen(true);
           }}
-          className="text-white hover:underline text-xs bg-[#0dcaf0] w-[30px] h-[30px] rounded-sm flex items-center justify-center"
-        >
-          <FaEdit size={20} />
+          className="text-white text-xs bg-gradient-to-r from-[#0dcaf0] to-[#09a5cc] w-[30px] h-[30px] rounded-md flex items-center justify-center shadow-md hover:scale-110 hover:shadow-lg transition-transform duration-200"
+                         >
+                    <CiEdit  size={24} />
         </button>
         <button
           onClick={() => {
@@ -84,18 +85,15 @@ const AddClient = () => {
     ),
   }));
 
-  // دالة إضافة عميل جديد
   const handleAddClient = (newClient) => {
     const id = clients.length ? clients[clients.length - 1].id + 1 : 1;
     setClients([...clients, { ...newClient, id }]);
   };
 
-  // دالة تعديل بيانات العميل
   const handleUpdateClient = (updatedClient) => {
     setClients(clients.map(c => (c.id === updatedClient.id ? updatedClient : c)));
   };
 
-  // دالة حذف العميل
   const handleDeleteClient = () => {
     setClients(clients.filter(c => c.id !== selectedClient.id));
     setDeleteModalOpen(false);

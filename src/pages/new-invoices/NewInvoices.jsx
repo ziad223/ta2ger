@@ -8,6 +8,7 @@ import DeleteModal from './DeleteModal';
 import CustomSelect from '../../components/shared/CustomSelect';
 import AddInvoiceModal from './AddInvoiceModal';
 import ViewInvoiceModal from "./ViewInvoiceModal"; 
+import { CiEdit } from 'react-icons/ci';
 
 const NewInvoices = () => {
   const [isViewOpen, setViewOpen] = useState(false);
@@ -113,9 +114,9 @@ const handlePrint = () => {
             setSelectedInvoice(inv);
             setEditModalOpen(true);
           }}
-          className="bg-[#0dcaf0] text-white rounded-sm w-[30px] h-[30px] flex items-center justify-center"
-        >
-          <FaEdit size={18} />
+          className="text-white text-xs bg-gradient-to-r from-[#0dcaf0] to-[#09a5cc] w-[30px] h-[30px] rounded-md flex items-center justify-center shadow-md hover:scale-110 hover:shadow-lg transition-transform duration-200"
+         >
+           <CiEdit  size={24} />
         </button>
         <button
           onClick={() => {

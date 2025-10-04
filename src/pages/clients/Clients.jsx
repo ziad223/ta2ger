@@ -6,6 +6,7 @@ import Table from '../../components/shared/Table';
 import AddClientModal from './AddClientModal';
 import EditClientModal from './EditClientModal';
 import DeleteClientModal from './DeleteClientModal';
+import { CiEdit } from 'react-icons/ci';
 
 const Clients = () => {
   const [clients, setClients] = useState([
@@ -42,15 +43,16 @@ const Clients = () => {
     ...client,
     actions: (
       <div className="flex gap-2 justify-center">
-        <button
-          onClick={() => {
-            setSelectedClient(client);
-            setEditModalOpen(true);
-          }}
-          className="text-white hover:underline text-xs bg-[#0dcaf0] w-[30px] h-[30px] rounded-sm flex items-center justify-center"
-        >
-          <FaEdit size={20} />
-        </button>
+       <button
+  onClick={() => {
+    setSelectedClient(client);
+    setEditModalOpen(true);
+  }}
+  className="text-white text-xs bg-gradient-to-r from-[#0dcaf0] to-[#09a5cc] w-[30px] h-[30px] rounded-md flex items-center justify-center shadow-md hover:scale-110 hover:shadow-lg transition-transform duration-200"
+>
+  <CiEdit  size={24} />
+</button>
+
         <button
           onClick={() => {
             setSelectedClient(client);

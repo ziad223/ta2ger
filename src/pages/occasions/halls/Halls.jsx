@@ -8,6 +8,7 @@ import DeleteHallModal from "./DeleteHallModal";
 import logo1 from '../../../../public/images/home/media-center.png'
 import logo2 from '../../../../public/images/home/hero.png'
 import { Link } from "react-router-dom";
+import { CiEdit } from "react-icons/ci";
 const Halls = () => {
   const [halls, setHalls] = useState([
     {
@@ -82,9 +83,9 @@ const Halls = () => {
             setSelectedHall(hall);
             setEditModalOpen(true);
           }}
-          className="text-white bg-[#0dcaf0] w-[30px] h-[30px] rounded-sm flex items-center justify-center"
-        >
-          <FaEdit size={16} />
+          className="text-white text-xs bg-gradient-to-r from-[#0dcaf0] to-[#09a5cc] w-[30px] h-[30px] rounded-md flex items-center justify-center shadow-md hover:scale-110 hover:shadow-lg transition-transform duration-200"
+         >
+           <CiEdit  size={24} />
         </button>
         <button
           onClick={() => {
@@ -131,31 +132,28 @@ const Halls = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               value={searchTerm}
             />
-          <div className="flex flex-col md:flex-row gap-2 w-full">
-  <div
-    onClick={() => window.print()}
-    className="bg-yellow-400 w-full md:w-[35px] h-[35px] rounded-md text-white flex items-center justify-center cursor-pointer hover:bg-yellow-600 transition"
-  >
-    <FaPrint size={19} />
-  </div>
-
-  <Link
-    to="/reservations-schedule"
-    onClick={() => setAddModalOpen(true)}
-    className="bg-[#0dcaf0] flex items-center justify-center gap-2 px-3 h-[35px] text-white rounded-md w-full md:w-auto rounded-md"
-  >
-    <FaCalendar />
-    جدول الحجوزات
-  </Link>
-
-  <button
-    onClick={() => setAddModalOpen(true)}
-    className="bg-[#2ba670] px-3 h-[35px] text-white rounded-md w-full md:w-auto"
-  >
-    أضف قاعة +
-  </button>
-</div>
-
+           <div className="flex gap-2">
+            <div
+                  onClick={() => window.print()}
+                  className="bg-yellow-400 w-[35px] h-[35px] rounded-md text-white flex items-center justify-center cursor-pointer hover:bg-yellow-600 transition"
+                >
+                  <FaPrint size={19} />
+                </div>
+              <Link
+              to='/reservations-schedule'
+              onClick={() => setAddModalOpen(true)}
+              className="bg-[#0dcaf0] flex items-center gap-2 px-3 h-[35px] text-white rounded-md w-full md:w-auto"
+            >
+              <FaCalendar/>
+             جدول الحجوزات
+            </Link>
+            <button
+              onClick={() => setAddModalOpen(true)}
+              className="bg-[#2ba670] px-3 h-[35px] text-white rounded-md w-full md:w-auto"
+            >
+              أضف قاعة +
+            </button>
+           </div>
           </div>
 
           <Table columns={columns} data={dataWithActions} />

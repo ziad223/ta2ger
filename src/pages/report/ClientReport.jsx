@@ -99,7 +99,7 @@ const ClientReport = () => {
           {/* ====== العنوان ====== */}
           <div className="flex items-center gap-3 mb-6">
             <Link
-              to="/report/client-report"
+              to="/report"
               className="bg-gray-500 rounded-lg p-2 text-white font-semibold cursor-pointer"
             >
               <FaChevronRight />

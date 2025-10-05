@@ -57,6 +57,8 @@ import Expenses from './pages/report/Expenses';
 import FinancialAdvance from './pages/report/FinancialAdvance';
 import ClientReport from './pages/report/ClientReport';
 import HallsReport from './pages/report/HallsReport';
+import BondReport from './pages/report/BondReport';
+import Receipt from './pages/report/Receipt';
 
 
 const AppContent = () => {
@@ -130,6 +132,8 @@ const AppContent = () => {
           <Route path='/report/financial-advance' element={<ProtectedRoute><FinancialAdvance /></ProtectedRoute>} />
           <Route path='/report/client-report' element={<ProtectedRoute><ClientReport /></ProtectedRoute>} />
           <Route path='/report/halls-report' element={<ProtectedRoute><HallsReport /></ProtectedRoute>} />
+          <Route path='/report/bond-report' element={<ProtectedRoute><BondReport /></ProtectedRoute>} />
+          <Route path='/report/receipt-and-disbursement-voucher-report' element={<ProtectedRoute><Receipt/></ProtectedRoute>} />
         </Routes>
       </Suspense>
       {!hideFooter && <Footer />}

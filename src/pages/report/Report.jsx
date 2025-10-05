@@ -39,20 +39,21 @@ const Report = () => {
                             <img src="/images/home/report-5.png" alt="" className='w-[50px] h-[50px]' />
                         </Link>
                         
-                        <Link to='/report/haslls-report' className='rounded-lg bg-[#f8f9fa] transition hover:scale-105 duration-300 cursor-pointer flex flex-col gap-3 lg:h-[130px] p-3 items-center justify-center'>
+                        <Link to='/report/halls-report' className='rounded-lg bg-[#f8f9fa] transition hover:scale-105 duration-300 cursor-pointer flex flex-col gap-3 lg:h-[130px] p-3 items-center justify-center'>
                             <h2 className='font-bold text-xl'>
                                   تقرير القاعات</h2>
                             <img src="/images/home/report-6.png" alt="" className='w-[50px] h-[50px]' />
                         </Link>
-                         <Link to='/trial-balance' className='rounded-lg bg-[#f8f9fa] transition hover:scale-105 duration-300 cursor-pointer flex flex-col gap-3 lg:h-[130px] p-3 items-center justify-center'>
+                         <Link to='/report/bond-report' className='rounded-lg bg-[#f8f9fa] transition hover:scale-105 duration-300 cursor-pointer flex flex-col gap-3 lg:h-[130px] p-3 items-center justify-center'>
                             <h2 className='font-bold text-xl'>
-                                ميزان المراجعة</h2>
+                               تقرير السندات</h2>
                             <img src="/images/home/report-7.png" alt="" className='w-[50px] h-[50px]' />
                         </Link>
 
-                         <Link to='/income-statement' className='rounded-lg bg-[#f8f9fa] transition hover:scale-105 duration-300 cursor-pointer flex flex-col gap-3 lg:h-[130px] p-3 items-center justify-center'>
-                            <h2 className='font-bold text-xl'>
-                                قائمة الدخل</h2>
+                         <Link to='/report/receipt-and-disbursement-voucher-report' className='rounded-lg bg-[#f8f9fa] transition hover:scale-105 duration-300 cursor-pointer flex flex-col gap-3 lg:h-[130px] p-3 items-center justify-center'>
+                            <h2 className='font-bold text-lg'>
+                                 تقرير سندات القبض والصرف
+</h2>
                             <img src="/images/home/report-6.png" alt="" className='w-[50px] h-[50px]' />
                         </Link>
 

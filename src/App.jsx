@@ -1,7 +1,6 @@
 import React, { useEffect, Suspense } from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { HelmetProvider } from 'react-helmet-async';
 import Loader from './components/shared/Loader';
 import Home from './pages/Home';
@@ -63,17 +62,8 @@ import Receipt from './pages/report/Receipt';
 
 const AppContent = () => {
   const location = useLocation();
-  const language = useSelector((state) => state.language.language);
 
-  useEffect(() => {
-    if (language === 'ar') {
-      document.documentElement.setAttribute('dir', 'rtl');
-    } else {
-      document.documentElement.setAttribute('dir', 'ltr');
-    }
-  }, [language]);
 
-  // 👇 الشرط هنا
   const hideFooter = location.pathname === '/login';
   const hideNavbar = location.pathname === '/login';
 

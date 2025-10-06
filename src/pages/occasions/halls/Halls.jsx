@@ -1,117 +1,188 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Container from "../../../components/shared/Container";
 import Table from "../../../components/shared/Table";
-import { FaCalendar, FaEdit, FaPrint, FaTrashAlt } from "react-icons/fa";
+import { FaPrint, FaTrashAlt } from "react-icons/fa";
+import { CiEdit } from "react-icons/ci";
+import { Link } from "react-router-dom";
 import AddHallModal from "./AddHallModal";
 import EditHallModal from "./EditHallModal";
 import DeleteHallModal from "./DeleteHallModal";
-import logo1 from '../../../../public/images/home/media-center.png'
-import logo2 from '../../../../public/images/home/hero.png'
-import { Link } from "react-router-dom";
-import { CiEdit } from "react-icons/ci";
-const Halls = () => {
-  const [halls, setHalls] = useState([
-    {
-      id: 1,
-      logo:logo1,
-      name: "قاعة الأندلس",
-      address: "الرياض - شارع الملك فهد",
-      taxNumber: "123456789",
-      phone: "0551234567",
-      status: "متاحة",
-      prices: "5000 ريال",
-      bookings: "12",
-    },
-    {
-      id: 2,
-      logo: logo2,
-      name: "قاعة الفيصل",
-      address: "جدة - حي السلامة",
-      taxNumber: "987654321",
-      phone: "0567890123",
-      status: "مغلقة",
-      prices: "7000 ريال",
-      bookings: "5",
-    },
-  ]);
+import apiServiceCall from "../../../utils/apiServiceCall";
 
+const Halls = () => {
+  const [halls, setHalls] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-
   const [selectedHall, setSelectedHall] = useState(null);
 
-  // الأعمدة
-  const columns = [
-    { label: "شعار القاعة", key: "logo" },
-    { label: "اسم القاعة", key: "name" },
-    { label: "العنوان", key: "address" },
-    { label: "الرقم الضريبي", key: "taxNumber" },
-    { label: "الجوال", key: "phone" },
-    { label: "الحالة", key: "status" },
-    { label: "الأسعار", key: "prices" },
-    { label: "الحجوزات", key: "bookings" },
-    { label: "التحكم", key: "actions" },
+  // 🧭 Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [perPage, setPerPage] = useState(10);
+
+const fetchHalls = async (page = 1) => {
+  setIsLoading(true);
+  setError("");
+  try {
+    const token = localStorage.getItem("token");
+
+    const data = await apiServiceCall({
+      url: `halls?page=${page}`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (Array.isArray(data.data)) {
+      const filteredData = data.data.map((hall) => {
+        const { ...rest } = hall;
+        return rest;
+      });
+      setHalls(filteredData);
+    } else {
+      setHalls([]);
+    }
+
+    if (data.pagination) {
+      setCurrentPage(data.pagination.current_page);
+      setLastPage(data.pagination.last_page);
+      setPerPage(data.pagination.per_page); // دلوقتي هيبقى دايمًا 10
+      setTotal(data.pagination.total);
+    }
+  } catch (err) {
+    console.error("Error fetching halls:", err);
+    setError("❌ فشل تحميل البيانات من السيرفر");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
+  useEffect(() => {
+    fetchHalls(currentPage);
+  }, [currentPage]);
+
+  // 🧩 Table Columns
+// 🧩 Table Columns
+const columns = useMemo(() => {
+  if (!halls.length) return [];
+
+  const excludedKeys = [
+    "wa_api_instance_id",
+    "wa_api_token",
+    "wa_api_instance_id_generated_at",
+    "taqnyat_app_key",
+    "taqnyat_sender",
   ];
 
-  // فلترة البحث بالاسم أو العنوان
+  const keys = Object.keys(halls[0]).filter((key) => !excludedKeys.includes(key));
+  const orderedKeys = ["logo", ...keys.filter((key) => key !== "logo")];
+
+  const columnLabels = {
+    logo: "شعار القاعة",
+    name: "اسم القاعة",
+    address: "العنوان",
+    tax_number: "الرقم الضريبي",
+    phone: "الجوال",
+    status: "الحالة",
+    rent_from_time: "من وقت الإيجار",
+    rent_to_time: "إلى وقت الإيجار",
+    about_hall: "عن القاعة",
+    alert_message	: "رسالة التنبيه"
+  };
+
+  return orderedKeys
+    .map((key) => ({
+      label: columnLabels[key] || key,
+      key,
+    }))
+    .concat([{ label: "التحكم", key: "actions" }]);
+}, [halls]);
+
+
+  // 🔍 Filtering
   const filteredHalls = useMemo(() => {
     if (!searchTerm.trim()) return halls;
     return halls.filter(
       (hall) =>
-        hall.name.includes(searchTerm.trim()) ||
-        hall.address.includes(searchTerm.trim())
+        hall.name?.toLowerCase().includes(searchTerm.trim().toLowerCase()) ||
+        hall.address?.toLowerCase().includes(searchTerm.trim().toLowerCase())
     );
   }, [searchTerm, halls]);
 
-  // إضافة أزرار التحكم
-  const dataWithActions = filteredHalls.map((hall) => ({
-    ...hall,
-    logo: (
-      <img
-        src={hall.logo}
-        alt={hall.name}
-        className="w-16 h-12 object-cover rounded mx-auto"
-      />
-    ),
-    actions: (
-      <div className="flex gap-2 justify-center">
-        <button
-          onClick={() => {
-            setSelectedHall(hall);
-            setEditModalOpen(true);
-          }}
-          className="text-white text-xs bg-gradient-to-r from-[#0dcaf0] to-[#09a5cc] w-[30px] h-[30px] rounded-md flex items-center justify-center shadow-md hover:scale-110 hover:shadow-lg transition-transform duration-200"
-         >
-           <CiEdit  size={24} />
-        </button>
-        <button
-          onClick={() => {
-            setSelectedHall(hall);
-            setDeleteModalOpen(true);
-          }}
-          className="text-white bg-red-500 w-[30px] h-[30px] rounded-sm flex items-center justify-center"
-        >
-          <FaTrashAlt size={14} />
-        </button>
-      </div>
-    ),
-  }));
+ const dataWithActions = useMemo(() => {
+  if (!Array.isArray(filteredHalls)) return [];
 
-  // إضافة قاعة جديدة
+  return filteredHalls.map((hall) => {
+    // نحول كل القيم اللي هي objects إلى نصوص مفهومة
+    const normalizedHall = Object.fromEntries(
+      Object.entries(hall).map(([key, value]) => {
+        if (typeof value === "object" && value !== null) {
+          return [key, value.name || value.id || JSON.stringify(value)];
+        }
+        return [key, value];
+      })
+    );
+
+    return {
+      ...normalizedHall,
+      logo: hall.logo ? (
+        <img
+          src={hall.logo}
+          alt={hall.name}
+          className="w-16 h-12 object-cover rounded mx-auto"
+        />
+      ) : (
+        <span className="text-gray-400">لا يوجد شعار</span>
+      ),
+      status:
+        hall.status === 1 || hall.status === true ? (
+          <span className="text-green-600 font-semibold">متاحة</span>
+        ) : (
+          <span className="text-red-600 font-semibold">غير متاحة</span>
+        ),
+      actions: (
+        <div className="flex gap-2 justify-center">
+          <button
+            onClick={() => {
+              setSelectedHall(hall);
+              setEditModalOpen(true);
+            }}
+            className="text-white text-xs bg-gradient-to-r from-[#0dcaf0] to-[#09a5cc] w-[30px] h-[30px] rounded-md flex items-center justify-center shadow-md hover:scale-110 transition-transform duration-200"
+          >
+            <CiEdit size={20} />
+          </button>
+          <button
+            onClick={() => {
+              setSelectedHall(hall);
+              setDeleteModalOpen(true);
+            }}
+            className="text-white bg-red-500 w-[30px] h-[30px] rounded-sm flex items-center justify-center hover:bg-red-600 transition"
+          >
+            <FaTrashAlt size={14} />
+          </button>
+        </div>
+      ),
+    };
+  });
+}, [filteredHalls]);
+
   const handleAddHall = (newHall) => {
     const id = halls.length ? halls[halls.length - 1].id + 1 : 1;
     setHalls([...halls, { ...newHall, id }]);
   };
 
-  // تعديل بيانات القاعة
   const handleUpdateHall = (updatedHall) => {
     setHalls(halls.map((h) => (h.id === updatedHall.id ? updatedHall : h)));
   };
 
-  // حذف القاعة
   const handleDeleteHall = () => {
     setHalls(halls.filter((h) => h.id !== selectedHall.id));
     setDeleteModalOpen(false);
@@ -123,44 +194,92 @@ const Halls = () => {
       <div className="p-4 min-h-screen my-10">
         <h2 className="text-xl font-bold mb-4">القاعات</h2>
 
-        <div className="bg-white mt-5 shadow-sm p-5 rounded-lg">
-          <div className="flex flex-col md:flex-row items-center justify-between w-full gap-3 md:gap-0">
-            <input
-              type="text"
-              placeholder="البحث بالاسم أو العنوان"
-              className="outline-none h-[40px] border px-3 rounded-lg w-full md:w-1/3"
-              onChange={(e) => setSearchTerm(e.target.value)}
-              value={searchTerm}
-            />
-           <div className="flex gap-2">
-            <div
+        {error && <p className="text-red-500 mb-3">{error}</p>}
+        {isLoading ? (
+          <p className="text-center text-gray-500">جاري تحميل القاعات...</p>
+        ) : (
+          <div className="bg-white mt-5 shadow-sm p-5 rounded-lg">
+            {/* 🔍 شريط البحث و الأزرار */}
+            <div className="flex flex-col md:flex-row items-center justify-between w-full gap-3 md:gap-0 mb-4">
+              <input
+                type="text"
+                placeholder="البحث بالاسم أو العنوان"
+                className="outline-none h-[40px] border px-3 rounded-lg w-full md:w-1/3"
+                onChange={(e) => setSearchTerm(e.target.value)}
+                value={searchTerm}
+              />
+              <div className="flex gap-2">
+                <div
                   onClick={() => window.print()}
                   className="bg-yellow-400 w-[35px] h-[35px] rounded-md text-white flex items-center justify-center cursor-pointer hover:bg-yellow-600 transition"
                 >
                   <FaPrint size={19} />
                 </div>
-              <Link
-              to='/reservations-schedule'
-              onClick={() => setAddModalOpen(true)}
-              className="bg-[#0dcaf0] flex items-center gap-2 px-3 h-[35px] text-white rounded-md w-full md:w-auto"
-            >
-              <FaCalendar/>
-             جدول الحجوزات
-            </Link>
-            <button
-              onClick={() => setAddModalOpen(true)}
-              className="bg-[#2ba670] px-3 h-[35px] text-white rounded-md w-full md:w-auto"
-            >
-              أضف قاعة +
-            </button>
-           </div>
-          </div>
+                <Link
+                  to="/reservations-schedule"
+                  className="bg-[#0dcaf0] flex items-center gap-2 px-3 h-[35px] text-white rounded-md w-full md:w-auto"
+                >
+                  جدول الحجوزات
+                </Link>
+                <button
+                  onClick={() => setAddModalOpen(true)}
+                  className="bg-[#2ba670] px-3 h-[35px] text-white rounded-md w-full md:w-auto"
+                >
+                  أضف قاعة +
+                </button>
+              </div>
+            </div>
 
-          <Table columns={columns} data={dataWithActions} />
-        </div>
+            {/* 🧮 الجدول */}
+            <Table columns={columns} data={dataWithActions} />
+
+            {/* 📖 الباجينيشن */}
+            {lastPage > 1 && (
+              <div className="flex flex-wrap justify-center items-center gap-2 mt-6">
+                <button
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className={`px-4 py-1.5 rounded-md font-medium transition ${
+                    currentPage === 1
+                      ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                      : "bg-[#0dcaf0] text-white hover:bg-[#0bb4d8]"
+                  }`}
+                >
+                  السابق
+                </button>
+
+                {Array.from({ length: lastPage }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-3 py-1 rounded-md font-semibold border transition ${
+                      page === currentPage
+                        ? "bg-[#0dcaf0] text-white border-[#0dcaf0]"
+                        : "bg-white text-gray-600 border-gray-300 hover:bg-gray-100"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+
+                <button
+                  onClick={() => setCurrentPage((p) => Math.min(lastPage, p + 1))}
+                  disabled={currentPage === lastPage}
+                  className={`px-4 py-1.5 rounded-md font-medium transition ${
+                    currentPage === lastPage
+                      ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                      : "bg-[#0dcaf0] text-white hover:bg-[#0bb4d8]"
+                  }`}
+                >
+                  التالي
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* مودالات */}
+      {/* 🧱 المودالات */}
       <AddHallModal
         isOpen={isAddModalOpen}
         onClose={() => setAddModalOpen(false)}
@@ -177,6 +296,7 @@ const Halls = () => {
         onClose={() => setDeleteModalOpen(false)}
         onDelete={handleDeleteHall}
         hallName={selectedHall?.name}
+        hallId={selectedHall?.id}
       />
     </Container>
   );

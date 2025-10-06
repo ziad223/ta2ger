@@ -6,8 +6,11 @@ body {
   overflow-x: hidden !important; 
   font-family: 'Cairo', sans-serif !important;
    background-color: #f7f6fe;
+   direction: rtl;
 }
-
+.ss{
+  direction: ltr !important;  
+}
 html {
   scroll-behavior: smooth;
 }

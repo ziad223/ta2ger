@@ -1,1 +1,1 @@
-export const base_url = 'https://app.ghasiq.sa/api'
+export const base_url = 'https://afrah-apis.const-tech.in/api/'

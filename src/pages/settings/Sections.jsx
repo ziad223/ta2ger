@@ -18,7 +18,6 @@ const Sections = () => {
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedSection, setSelectedSection] = useState(null);
 
-  // جلب البيانات من API
   useEffect(() => {
     const fetchSections = async () => {
       try {

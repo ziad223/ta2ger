@@ -1,13 +1,15 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
-import { toast } from 'react-toastify';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { toast , ToastContainer } from 'react-toastify';
 import CustomSelect from '../../components/shared/CustomSelect';
 import { GoX } from 'react-icons/go';
 import apiServiceCall from '../../utils/apiServiceCall';
 
 const EditPayWayModal = ({ payWay, onClose, refetch }) => {
+  const [options, setOptions] = useState([]);
+
   const {
     control,
     register,
@@ -23,7 +25,34 @@ const EditPayWayModal = ({ payWay, onClose, refetch }) => {
     },
   });
 
-  // ✅ تحميل البيانات عند الفتح
+useEffect(() => {
+  const fetchPaymentMethods = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const res = await apiServiceCall({
+        url: 'select/paymentMethods/types',
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const fetchedOptions =
+        res?.data?.map((item) => ({
+          value: item.id, // استخدم id كـ value
+          label: item.name, // الاسم للعرض
+        })) || [];
+
+      setOptions(fetchedOptions);
+    } catch (err) {
+      console.error('❌ خطأ أثناء تحميل طرق الدفع:', err);
+      toast.error('حدث خطأ أثناء تحميل طرق الدفع');
+    }
+  };
+
+  fetchPaymentMethods();
+}, []);
+
+
+  // ✅ تحميل بيانات الدفع في الحقول عند فتح المودال
   useEffect(() => {
     if (payWay) {
       setValue('name', payWay.name || '');
@@ -33,14 +62,6 @@ const EditPayWayModal = ({ payWay, onClose, refetch }) => {
     }
   }, [payWay, setValue]);
 
-  // ✅ أنواع الدفع
-  const options = [
-    { value: 'cash', label: 'نقدي' },
-    { value: 'wallet', label: 'محفظة إلكترونية' },
-    { value: 'bank_transfer', label: 'تحويل بنكي' },
-    { value: 'credit_card', label: 'بطاقة بنكية' },
-  ];
-
   // ✅ الميوتاشن للتحديث
   const mutation = useMutation({
     mutationFn: async (data) => {
@@ -49,15 +70,13 @@ const EditPayWayModal = ({ payWay, onClose, refetch }) => {
       const payload = {
         name: data.name,
         type: data.type,
-        is_active: data.is_active ? true : false,
-        is_default: data.is_default ? true : false,
+        is_active: !!data.is_active,
+        is_default: !!data.is_default,
       };
 
-      console.log('📤 البيانات المرسلة:', payload);
-
       return apiServiceCall({
-        url: `payment-ways/${payWay.id}`,
-        method: 'PUT', // ✅ POST مع _method: 'PUT'
+        url: `payment-methods/${payWay.id}`,
+        method: 'PUT',
         body: payload,
         headers: {
           Authorization: `Bearer ${token}`,
@@ -68,16 +87,13 @@ const EditPayWayModal = ({ payWay, onClose, refetch }) => {
 
     onSuccess: (res) => {
       toast.success(res.message || 'تم التحديث بنجاح ✅');
+        setTimeout(() => {
+      onClose();
+    }, 1000);
 
-      // ⏱️ غلق المودال بعد ثانية
-      setTimeout(() => {
-        onClose();
-      }, 1000);
-
-      // ⏱️ refetch بعد ثانية ونصف
-      setTimeout(() => {
-        refetch && refetch();
-      }, 1500);
+    setTimeout(() => {
+     window.location.reload()
+    }, 1200);
     },
 
     onError: (err) => {
@@ -92,6 +108,7 @@ const EditPayWayModal = ({ payWay, onClose, refetch }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
+      <ToastContainer/>
       <div className="bg-white p-6 rounded-lg w-[400px]">
         <h3 className="text-lg font-bold mb-4 flex justify-between">
           تعديل طريقة الدفع
@@ -118,30 +135,27 @@ const EditPayWayModal = ({ payWay, onClose, refetch }) => {
             )}
           </div>
 
-          {/* النوع */}
-          <div>
-            <label className="block mb-1 text-sm font-semibold">النوع</label>
-            <Controller
-              name="type"
-              control={control}
-              rules={{ required: 'النوع مطلوب' }}
-              render={({ field }) => (
-                <CustomSelect
-                  value={
-                    field.value
-                      ? options.find((opt) => opt.value === field.value)
-                      : null
-                  }
-                  onChange={(option) => field.onChange(option?.value)}
-                  options={options}
-                  placeholder="اختر نوع الدفع"
-                />
-              )}
-            />
-            {errors.type && (
-              <span className="text-red-500 text-sm">{errors.type.message}</span>
-            )}
-          </div>
+        <div>
+  <label className="block mb-1 text-sm font-semibold">النوع</label>
+  <Controller
+    name="type"
+    control={control}
+    rules={{ required: 'النوع مطلوب' }}
+    render={({ field }) => (
+      <CustomSelect
+        options={options}
+        value={
+          options.find((opt) => opt.value === field.value) || null
+        }
+        onChange={(option) => field.onChange(option?.value)}
+        placeholder="اختر نوع الدفع"
+      />
+    )}
+  />
+  {errors.type && (
+    <span className="text-red-500 text-sm">{errors.type.message}</span>
+  )}
+</div>
 
           {/* خصائص */}
           <div className="flex flex-col gap-3 mt-2">

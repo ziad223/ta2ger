@@ -1,82 +1,116 @@
-import React, { useState, useMemo } from 'react';
-import Container from '../../components/shared/Container';
-import { FaEdit, FaPrint, FaTrashAlt } from 'react-icons/fa';
-import Table from '../../components/shared/Table';
-
-import AddClientModal from './AddClientModal';
-import EditClientModal from './EditClientModal';
-import DeleteClientModal from './DeleteClientModal';
-import { CiEdit } from 'react-icons/ci';
+'use client';
+import React, { useState, useEffect, useMemo } from "react";
+import Container from "../../components/shared/Container";
+import { FaPrint, FaTrashAlt } from "react-icons/fa";
+import { CiEdit } from "react-icons/ci";
+import Table from "../../components/shared/Table";
+import AddClientModal from "./AddClientModal";
+import EditClientModal from "./EditClientModal";
+import DeleteClientModal from "./DeleteClientModal";
+import apiServiceCall from "../../utils/apiServiceCall";
+import { toast } from "react-toastify";
 
 const Clients = () => {
-  const [clients, setClients] = useState([
-    { id: 1, name: "محمد علي", nationalId: "1010101010", phone: "0551234567", altPhone: "0557654321", createdAt: "2025-09-19", hall: "قاعة الأندلس", bookings: 5 },
-    { id: 2, name: "أحمد حسن", nationalId: "2020202020", phone: "0567890123", altPhone: "0563210987", createdAt: "2025-09-18", hall: "قاعة الفيصل", bookings: 2 },
-  ]);
-
-  const [searchTerm, setSearchTerm] = useState('');
+  const [clients, setClients] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const columns = [
-    { label: "#", key: "id" },
-    { label: "الاسم", key: "name" },
-    { label: "رقم هوية العميل", key: "nationalId" },
-    { label: "الجوال", key: "phone" },
-    { label: "رقم جوال اخر", key: "altPhone" },
-    { label: "تاريخ الاضافه", key: "createdAt" },
-    { label: "القاعة", key: "hall" },
-    { label: "الحجوزات", key: "bookings" },
-    { label: "التحكم", key: "actions" },
-  ];
+  // ✅ جلب البيانات من API
+  const fetchClients = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
 
+      const res = await apiServiceCall({
+        url: "clients",
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      console.log("🛰️ Response:", res);
+
+      if (res?.status) {
+        const fetchedClients =
+          res.data?.map((client) => ({
+            id: client.id,
+            name: client.name,
+            nationalId: client.id_number,
+            phone: client.phone,
+            altPhone: client.alt_phone,
+            createdAt: client.creator?.name || "—",
+            hall: client.hall?.name || "—",
+            bookings: client.tax_no || "—",
+          })) || [];
+
+        setClients(fetchedClients);
+      } else {
+        toast.error(res?.message || "حدث خطأ أثناء تحميل العملاء ❌");
+      }
+    } catch (err) {
+      console.error("❌ خطأ أثناء تحميل العملاء:", err);
+      toast.error("حدث خطأ أثناء تحميل العملاء");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchClients();
+  }, []);
+
+  // ✅ فلترة البحث
   const filteredClients = useMemo(() => {
     if (!searchTerm.trim()) return clients;
-    return clients.filter(client =>
+    return clients.filter((client) =>
       client.phone.includes(searchTerm.trim())
     );
   }, [searchTerm, clients]);
 
-  const dataWithActions = filteredClients.map(client => ({
+  const columns = [
+    { label: "#", key: "id" },
+    { label: "الاسم", key: "name" },
+    { label: "الجوال", key: "phone" },
+    { label: "رقم جوال اخر", key: "altPhone" },
+    { label: "القاعة", key: "hall" },
+    { label: "رقم ضريبي", key: "bookings" },
+    { label: "التحكم", key: "actions" },
+  ];
+
+  // ✅ تجهيز البيانات مع أزرار التحكم
+  const dataWithActions = filteredClients.map((client) => ({
     ...client,
     actions: (
       <div className="flex gap-2 justify-center">
-       <button
-  onClick={() => {
-    setSelectedClient(client);
-    setEditModalOpen(true);
-  }}
-  className="text-white text-xs bg-gradient-to-r from-[#0dcaf0] to-[#09a5cc] w-[30px] h-[30px] rounded-md flex items-center justify-center shadow-md hover:scale-110 hover:shadow-lg transition-transform duration-200"
->
-  <CiEdit  size={24} />
-</button>
+        <button
+          onClick={() => {
+            setSelectedClient(client);
+            setEditModalOpen(true);
+          }}
+          className="text-white text-xs bg-gradient-to-r from-[#0dcaf0] to-[#09a5cc] w-[30px] h-[30px] rounded-md flex items-center justify-center shadow-md hover:scale-110 hover:shadow-lg transition-transform duration-200"
+        >
+          <CiEdit size={22} />
+        </button>
 
         <button
           onClick={() => {
             setSelectedClient(client);
             setDeleteModalOpen(true);
           }}
-          className="text-white hover:underline text-xs bg-red-500 w-[30px] h-[30px] rounded-sm flex items-center justify-center"
+          className="text-white text-xs bg-red-500 w-[30px] h-[30px] rounded-sm flex items-center justify-center hover:bg-red-600 transition"
         >
-          <FaTrashAlt size={17} />
+          <FaTrashAlt size={15} />
         </button>
       </div>
     ),
   }));
 
-  const handleAddClient = (newClient) => {
-    const id = clients.length ? clients[clients.length - 1].id + 1 : 1;
-    setClients([...clients, { ...newClient, id }]);
-  };
-
-  const handleUpdateClient = (updatedClient) => {
-    setClients(clients.map(c => (c.id === updatedClient.id ? updatedClient : c)));
-  };
-
+  // ✅ الحذف (مؤقت محليًا)
   const handleDeleteClient = () => {
-    setClients(clients.filter(c => c.id !== selectedClient.id));
+    setClients((prev) => prev.filter((c) => c.id !== selectedClient.id));
     setDeleteModalOpen(false);
     setSelectedClient(null);
   };
@@ -95,37 +129,55 @@ const Clients = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               value={searchTerm}
             />
-             <div className="flex gap-3 items-center">
-              <div
-                    onClick={() => window.print()}
-                    className="bg-yellow-400 w-[40px] h-[40px] rounded-md text-white flex items-center justify-center cursor-pointer hover:bg-yellow-600 transition"
-                  >
-                    <FaPrint size={20} />
-                  </div>
-              <div
-              className="bg-[#0dcaf0] flex items-center justify-center md:px-3 px-1 h-[35px] text-white rounded-md w-full md:w-auto"
-            >
-             عدد العملاء 
-             <span>: 2</span>
-            </div>
 
-            <button
-              onClick={() => setAddModalOpen(true)}
-              className="bg-[#2ba670] md:px-3 px-1 h-[35px] text-white rounded-md w-full md:w-auto"
-            >
-              أضف عميل +
-            </button>
-             </div>
+            <div className="flex gap-3 items-center">
+              <div
+                onClick={() => window.print()}
+                className="bg-yellow-400 w-[40px] h-[40px] rounded-md text-white flex items-center justify-center cursor-pointer hover:bg-yellow-600 transition"
+              >
+                <FaPrint size={20} />
+              </div>
+
+              <div className="bg-[#0dcaf0] flex items-center justify-center md:px-3 px-1 h-[35px] text-white rounded-md w-full md:w-auto">
+                عدد العملاء <span>: {clients.length}</span>
+              </div>
+
+              <button
+                onClick={() => setAddModalOpen(true)}
+                className="bg-[#2ba670] md:px-3 px-1 h-[35px] text-white rounded-md w-full md:w-auto"
+              >
+                أضف عميل +
+              </button>
+            </div>
           </div>
 
-          <Table columns={columns} data={dataWithActions} />
+          {/* ✅ جدول العملاء */}
+          <div className="mt-6">
+            {loading ? (
+              <p className="text-center text-gray-500">جارٍ تحميل البيانات...</p>
+            ) : (
+              <Table columns={columns} data={dataWithActions} />
+            )}
+          </div>
         </div>
       </div>
 
-      {/* مودالات */}
-      <AddClientModal isOpen={isAddModalOpen} onClose={() => setAddModalOpen(false)} onAdd={handleAddClient} />
-      <EditClientModal isOpen={isEditModalOpen} onClose={() => setEditModalOpen(false)} client={selectedClient} onUpdate={handleUpdateClient} />
-      <DeleteClientModal isOpen={isDeleteModalOpen} onClose={() => setDeleteModalOpen(false)} onDelete={handleDeleteClient} client={selectedClient} />
+      {/* ✅ مودالات */}
+      <AddClientModal
+        isOpen={isAddModalOpen}
+        onClose={() => setAddModalOpen(false)}
+      />
+      <EditClientModal
+        isOpen={isEditModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        client={selectedClient}
+      />
+      <DeleteClientModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onDelete={handleDeleteClient}
+        client={selectedClient}
+      />
     </Container>
   );
 };

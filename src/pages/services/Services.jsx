@@ -1,7 +1,9 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 import Container from "../../components/shared/Container";
-import { FaBuffer, FaEdit, FaPrint, FaTrashAlt } from "react-icons/fa";
-import { Link, Links } from "react-router-dom";
+import { FaBuffer, FaEdit, FaPrint, FaTrashAlt, FaRedo } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import { FaBagShopping } from "react-icons/fa6";
 import * as XLSX from "xlsx";
 import AddServiceModal from "./AddServiceModal";
@@ -9,25 +11,121 @@ import EditServiceModal from "./EditServiceModal";
 import DeleteServiceModal from "./DeleteServiceModal";
 import Table from "../../components/shared/Table";
 import { CiEdit } from "react-icons/ci";
+import apiServiceCall from "../../utils/apiServiceCall";
 
 const Services = () => {
-  const [services, setServices] = useState([
-    { id: 1, name: "باقة تصوير", section: "تصوير", barcode: "111", phone: "0551234567", email: "mohamed@example.com", halls: "قاعة الأندلس" },
-    { id: 2, name: "تنظيم حفلات", section: "تنظيم", barcode: "222", phone: "0567890123", email: "ahmed@example.com", halls: "قاعة الفيصل" },
-    { id: 3, name: "إيجار كراسي", section: "تأجير", barcode: "333", phone: "0579998887", email: "sara@example.com", halls: "قاعة الماسة" },
-    { id: 4, name: "إيجار طاولات", section: "تأجير", barcode: "444", phone: "0546662221", email: "ali@example.com", halls: "قاعة اللوتس" },
-    { id: 5, name: "بوفيه مفتوح", section: "طعام", barcode: "555", phone: "0591112223", email: "huda@example.com", halls: "قاعة الورد" },
-    { id: 6, name: "تنسيق ورود", section: "ديكور", barcode: "666", phone: "0587774449", email: "yousef@example.com", halls: "قاعة الزهور" },
-  ]);
-
+  const queryClient = useQueryClient();
+  const token = localStorage.getItem("token");
+  
   const [searchSection, setSearchSection] = useState("");
   const [searchName, setSearchName] = useState("");
   const [searchBarcode, setSearchBarcode] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
+
+  // استرجاع البيانات من API مع إعادة المحاولة
+  const { 
+    data: productsResponse, 
+    isLoading, 
+    error,
+    refetch,
+    isError 
+  } = useQuery({
+    queryKey: ['products', currentPage],
+    queryFn: () => apiServiceCall({
+      url: `/products?page=${currentPage}`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }),
+    retry: 2, // إعادة المحاولة مرتين
+    retryDelay: 1000, // انتظار ثانية بين المحاولات
+    staleTime: 5 * 60 * 1000, // 5 دقائق
+  });
+
+  // بيانات تجريبية للطوارئ
+  const fallbackData = {
+    data: [
+      {
+        id: 1,
+        name: "خدمة تجريبية 1",
+        barcode: "123456789",
+        sale_price: 100,
+        cost_price: "50",
+        category: { name: "التصوير" },
+        unit: { name: "وحدة" },
+        creator: { name: "مسؤول", phone: "0551234567", email: "admin@example.com" }
+      },
+      {
+        id: 2,
+        name: "خدمة تجريبية 2", 
+        barcode: "987654321",
+        sale_price: 200,
+        cost_price: "100",
+        category: { name: "التنظيم" },
+        unit: { name: "وحدة" },
+        creator: { name: "مسؤول", phone: "0551234567", email: "admin@example.com" }
+      }
+    ],
+    pagination: {
+      current_page: 1,
+      last_page: 1,
+      per_page: 10,
+      total: 2
+    },
+    has_quantity_count: 2,
+    no_quantity_count: 0
+  };
+
+  const effectiveData = isError ? fallbackData : productsResponse;
+
+  // طفرة لحذف المنتج
+  const deleteMutation = useMutation({
+    mutationFn: (productId) => apiServiceCall({
+      url: `/products/${productId}`,
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }),
+    onSuccess: () => {
+      toast.success('تم حذف المنتج بنجاح');
+      queryClient.invalidateQueries(['products']);
+    },
+    onError: (error) => {
+      toast.error('فشل في حذف المنتج');
+      console.error('Error deleting product:', error);
+    }
+  });
+
+  // تحويل البيانات من API إلى الشكل المطلوب
+  const services = useMemo(() => {
+    if (!effectiveData?.data) return [];
+    
+    return effectiveData.data.map(product => ({
+      id: product.id,
+      name: product.name,
+      section: product.category?.name || "بدون قسم",
+      barcode: product.barcode,
+      phone: product.creator?.phone || "غير متوفر",
+      email: product.creator?.email || "غير متوفر",
+      halls: product.unit?.name || "غير متوفر",
+      sale_price: product.sale_price,
+      cost_price: product.cost_price,
+      image: product.image,
+      barcode_image: product.barcode_image,
+      allow_quantity: product.allow_quantity,
+      is_default_in_rent: product.is_default_in_rent,
+      category: product.category,
+      unit: product.unit,
+      creator: product.creator,
+      components: product.components
+    }));
+  }, [effectiveData]);
 
   // الأعمدة
   const columns = [
@@ -35,22 +133,26 @@ const Services = () => {
     { label: "اسم الخدمة", key: "name" },
     { label: "القسم", key: "section" },
     { label: "الباركود", key: "barcode" },
-    { label: "الجوال", key: "phone" },
-    { label: "البريد الإلكتروني", key: "email" },
-    { label: "القاعات", key: "halls" },
+    { label: "سعر البيع", key: "sale_price" },
+    { label: "سعر التكلفة", key: "cost_price" },
+    { label: "الوحدة", key: "halls" },
     { label: "التحكم", key: "actions" },
   ];
 
+  // فلترة البيانات
   const filteredServices = useMemo(() => {
     return services.filter((s) =>
-      s.section.includes(searchSection.trim()) &&
-      s.name.includes(searchName.trim()) &&
+      s.section.toLowerCase().includes(searchSection.trim().toLowerCase()) &&
+      s.name.toLowerCase().includes(searchName.trim().toLowerCase()) &&
       s.barcode.includes(searchBarcode.trim())
     );
   }, [searchSection, searchName, searchBarcode, services]);
 
+  // إضافة أزرار التحكم
   const dataWithActions = filteredServices.map((s) => ({
     ...s,
+    sale_price: `$${s.sale_price}`,
+    cost_price: `$${s.cost_price}`,
     actions: (
       <div className="flex gap-2 justify-center">
         <button
@@ -58,9 +160,9 @@ const Services = () => {
             setSelectedService(s);
             setEditModalOpen(true);
           }}
-           className="text-white text-xs bg-gradient-to-r from-[#0dcaf0] to-[#09a5cc] w-[30px] h-[30px] rounded-md flex items-center justify-center shadow-md hover:scale-110 hover:shadow-lg transition-transform duration-200"
-                          >
-                     <CiEdit  size={24} />
+          className="text-white text-xs bg-gradient-to-r from-[#0dcaf0] to-[#09a5cc] w-[30px] h-[30px] rounded-md flex items-center justify-center shadow-md hover:scale-110 hover:shadow-lg transition-transform duration-200"
+        >
+          <CiEdit size={24} />
         </button>
         <button
           onClick={() => {
@@ -75,21 +177,24 @@ const Services = () => {
     ),
   }));
 
+  // إضافة خدمة جديدة
   const handleAddService = (newService) => {
-    const id = services.length ? services[services.length - 1].id + 1 : 1;
-    setServices([...services, { ...newService, id }]);
+    // هنا سيتم إضافة API call لإضافة منتج جديد
     setAddModalOpen(false);
   };
 
+  // تحديث خدمة
   const handleUpdateService = (updatedService) => {
-    setServices(services.map((s) => (s.id === updatedService.id ? updatedService : s)));
+    // هنا سيتم إضافة API call لتحديث المنتج
     setEditModalOpen(false);
     setSelectedService(null);
   };
 
   // حذف خدمة
   const handleDeleteService = () => {
-    setServices(services.filter((s) => s.id !== selectedService.id));
+    if (selectedService) {
+      deleteMutation.mutate(selectedService.id);
+    }
     setDeleteModalOpen(false);
     setSelectedService(null);
   };
@@ -107,20 +212,32 @@ const Services = () => {
     window.print();
   };
 
+  // التبديل بين الصفحات
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  // إعادة تحميل البيانات
+  const handleRetry = () => {
+    refetch();
+  };
+
   return (
     <Container>
       <div className="p-4 min-h-screen my-10">
         <div className="flex items-center justify-between w-full">
           <h2 className="text-xl font-bold mb-4">الخدمات</h2>
-          <button
-            onClick={() => setAddModalOpen(true)}
-            className="bg-[#2ba670] px-3 h-[35px] text-white rounded-md"
-          >
-            أضف خدمة +
-          </button>
+          
         </div>
 
         <div className="bg-white mt-5 shadow-lg p-5 rounded-lg">
+          {/* رسالة الخطأ */}
+          {isError && (
+            <div className="mb-4 p-3 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded">
+              <strong>ملاحظة:</strong> يتم عرض بيانات تجريبية بسبب مشكلة في الاتصال بالخادم.
+            </div>
+          )}
+
           <div className="flex flex-col md:flex-row items-center justify-between w-full gap-3 md:gap-0">
             {/* اللينكات */}
             <div className="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto">
@@ -149,7 +266,7 @@ const Services = () => {
                 أضف خدمة +
               </button>
               <Link
-              to='/services/units'
+                to='/services/units'
                 className="bg-[#2ba670] flex items-center justify-center px-4 h-[40px] text-white rounded-md w-full md:w-auto"
               >
                 الوحدات
@@ -171,7 +288,7 @@ const Services = () => {
 
           {/* البحث */}
           <div className="flex flex-col md:flex-row items-center justify-between w-full gap-3 md:gap-0 mt-5">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
               <input
                 type="text"
                 placeholder="البحث بالقسم"
@@ -197,27 +314,64 @@ const Services = () => {
 
             <select className="outline-none h-[40px] border px-3 rounded-lg w-full md:w-auto">
               <option>كل الخدمات : {services.length}</option>
-              <option>خدمات منتهية الكمية : 2</option>
-              <option>خدمات منتهية الصلاحية : 1</option>
-
-
-
-
-
-
-
-
-
-
-
-
+              <option>خدمات منتهية الكمية : {effectiveData?.no_quantity_count || 0}</option>
+              <option>خدمات منتهية الصلاحية : 0</option>
             </select>
           </div>
 
-          {/* الجدول */}
-          <div className="mt-6">
-            <Table columns={columns} data={dataWithActions} />
-          </div>
+          {/* حالة التحميل */}
+          {isLoading ? (
+            <div className="mt-6 text-center py-8">
+              <div className="text-gray-500">جاري تحميل البيانات...</div>
+            </div>
+          ) : (
+            <>
+              {/* الجدول */}
+              <div className="mt-6">
+                <Table columns={columns} data={dataWithActions} />
+              </div>
+
+              {/* الترقيم */}
+              {effectiveData?.pagination && effectiveData.pagination.last_page > 1 && (
+                <div className="flex justify-center items-center gap-2 mt-6">
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+                  >
+                    السابق
+                  </button>
+                  
+                  {Array.from({ length: Math.min(5, effectiveData.pagination.last_page) }, (_, i) => {
+                    const page = i + 1;
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`px-3 py-1 rounded ${
+                          currentPage === page ? 'bg-[#2ba670] text-white' : 'bg-gray-200'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === effectiveData.pagination.last_page}
+                    className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+                  >
+                    التالي
+                  </button>
+                  
+                  <span className="text-sm text-gray-600">
+                    الصفحة {currentPage} من {effectiveData.pagination.last_page}
+                  </span>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
 

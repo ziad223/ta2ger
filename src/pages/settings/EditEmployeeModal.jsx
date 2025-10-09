@@ -86,12 +86,10 @@ const mutation = useMutation({
   onSuccess: (res) => {
     toast.success(res.message || 'تم التحديث بنجاح ✅');
 
-    // ⏱️ غلق المودال بعد ثانية
     setTimeout(() => {
       onClose();
     }, 1000);
 
-    // ⏱️ refetch بعد ثانية ونصف
     setTimeout(() => {
       refetch && refetch();
     }, 1500);

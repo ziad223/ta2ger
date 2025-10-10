@@ -46,7 +46,6 @@ import AccountSettings from './pages/accounting/Account-settings';
 import AccountingTree from './pages/accounting/Accounting-tree';
  import AccountStatement from './pages/accounting/AccountStatement';
  import AccountStatements from './pages/report/AccountStatements';
-import TrialBalance from './pages/accounting/TrialBalance';
 import Restrictions from './pages/accounting/Restrictions';
 import IncomeStatement from './pages/accounting/IncomeStatment';
 import TaxReturn from './pages/accounting/TaxReturn';
@@ -58,6 +57,7 @@ import ClientReport from './pages/report/ClientReport';
 import HallsReport from './pages/report/HallsReport';
 import BondReport from './pages/report/BondReport';
 import Receipt from './pages/report/Receipt';
+import Suppliers from './pages/accounting/Suppliers';
 
 
 const AppContent = () => {
@@ -112,7 +112,7 @@ const AppContent = () => {
           <Route path='/account-tree' element={<ProtectedRoute><AccountingTree /></ProtectedRoute>} />
           <Route path='/restrictions' element={<ProtectedRoute><Restrictions /></ProtectedRoute>} />
           <Route path='/account-statement' element={<ProtectedRoute><AccountStatement /></ProtectedRoute>} />
-          <Route path='/trial-balance' element={<ProtectedRoute><TrialBalance /></ProtectedRoute>} />
+          <Route path='/suppliers' element={<ProtectedRoute><Suppliers /></ProtectedRoute>} />
           <Route path='/income-statement' element={<ProtectedRoute><IncomeStatement /></ProtectedRoute>} />
           <Route path='/tax-return' element={<ProtectedRoute><TaxReturn /></ProtectedRoute>} />
           <Route path='/report' element={<ProtectedRoute><Report /></ProtectedRoute>} />

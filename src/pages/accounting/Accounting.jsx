@@ -2,7 +2,7 @@ import React from 'react';
 import Container from '../../components/shared/Container';
 import { FaGear, FaScaleBalanced } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
-import { FaBalanceScale, FaChartLine, FaFileInvoice } from 'react-icons/fa';
+import { FaBalanceScale, FaChartLine, FaFileInvoice, FaUsers } from 'react-icons/fa';
 import { IoDocumentText } from 'react-icons/io5';
 import { AiOutlineAccountBook } from "react-icons/ai";
 
@@ -42,10 +42,10 @@ const Accounting = () => {
                                  الاقرار الضريبي</h2>
                             <IoDocumentText className='text-[#17a2b8] text-4xl' />
                         </Link>
-                         <Link to='/trial-balance' className='rounded-lg bg-[#f8f9fa] transition hover:scale-105 duration-300 cursor-pointer flex flex-col gap-3 lg:h-[130px] p-3 items-center justify-center'>
+                         <Link to='/suppliers' className='rounded-lg bg-[#f8f9fa] transition hover:scale-105 duration-300 cursor-pointer flex flex-col gap-3 lg:h-[130px] p-3 items-center justify-center'>
                             <h2 className='font-bold text-xl'>
-                                ميزان المراجعة</h2>
-                            <FaScaleBalanced className='text-[#17a2b8] text-4xl' />
+                                الموردين</h2>
+                            <FaUsers  className='text-[#17a2b8] text-4xl' />
                         </Link>
 
                          <Link to='/income-statement' className='rounded-lg bg-[#f8f9fa] transition hover:scale-105 duration-300 cursor-pointer flex flex-col gap-3 lg:h-[130px] p-3 items-center justify-center'>

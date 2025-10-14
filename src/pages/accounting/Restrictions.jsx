@@ -100,9 +100,7 @@ const [deleteId, setDeleteId] = useState(null);
     },
   ];
 
-  // ✅ تحميل أثناء انتظار البيانات
-  if (isLoading)
-    return <div className="text-center mt-10 text-lg font-semibold">جاري تحميل البيانات...</div>;
+ 
 
   return (
     <div className="my-20 min-h-screen">

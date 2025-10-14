@@ -196,7 +196,7 @@ const columns = useMemo(() => {
 
         {error && <p className="text-red-500 mb-3">{error}</p>}
         {isLoading ? (
-          <p className="text-center text-gray-500">جاري تحميل القاعات...</p>
+          null
         ) : (
           <div className="bg-white mt-5 shadow-sm p-5 rounded-lg">
             {/* 🔍 شريط البحث و الأزرار */}

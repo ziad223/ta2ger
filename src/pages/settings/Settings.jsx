@@ -207,15 +207,7 @@ const Settings = () => {
     mutation.mutate(formData);
   };
 
-  if (isLoading) {
-    return (
-      <Container>
-        <div className="p-4 min-h-screen flex items-center justify-center">
-          <div className="text-center">جاري تحميل الإعدادات...</div>
-        </div>
-      </Container>
-    );
-  }
+ 
 
   return (
     <Container>

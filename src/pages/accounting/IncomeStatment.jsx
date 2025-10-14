@@ -160,7 +160,7 @@ const IncomeStatement = () => {
 
           {/* الجدول الأول */}
           {loading ? (
-            <p className="text-center py-10">جاري تحميل البيانات...</p>
+            null
           ) : (
             <Table columns={columns} data={data} />
           )}

@@ -321,9 +321,7 @@ const Services = () => {
 
           {/* حالة التحميل */}
           {isLoading ? (
-            <div className="mt-6 text-center py-8">
-              <div className="text-gray-500">جاري تحميل البيانات...</div>
-            </div>
+            null
           ) : (
             <>
               {/* الجدول */}

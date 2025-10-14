@@ -37,7 +37,7 @@ const ViewEmployeeModal = ({ userId, onClose }) => {
         <h3 className="font-bold mb-4 text-lg text-center">بيانات الموظف</h3>
 
         {loading ? (
-          <p className="text-center text-gray-500 py-5">جاري التحميل...</p>
+          null
         ) : (
           <div className="space-y-3 text-sm">
             <div><strong>الاسم:</strong> {user.name}</div>

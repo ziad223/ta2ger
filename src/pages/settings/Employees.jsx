@@ -220,14 +220,7 @@ const handleDeleteClient = async () => {
             </button>
           </div>
 
-          {/* ✅ Table */}
-          <div className="mt-6">
-            {loading ? (
-              <p className="text-center text-gray-500 py-5">جاري التحميل...</p>
-            ) : (
-              <Table columns={columns} data={dataWithActions} />
-            )}
-          </div>
+         
 
           {/* ✅ Pagination */}
           {lastPage > 1 && (

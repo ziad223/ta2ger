@@ -158,9 +158,7 @@ const Occasions = () => {
           </div>
 
           {isLoading ? (
-            <p className="text-center text-gray-500 mt-5">
-              ⏳ جاري تحميل المناسبات...
-            </p>
+           null
           ) : (
             <Table columns={columns} data={dataWithActions} />
           )}

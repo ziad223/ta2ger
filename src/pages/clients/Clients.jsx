@@ -151,14 +151,7 @@ const Clients = () => {
             </div>
           </div>
 
-          {/* ✅ جدول العملاء */}
-          <div className="mt-6">
-            {loading ? (
-              <p className="text-center text-gray-500">جارٍ تحميل البيانات...</p>
-            ) : (
-              <Table columns={columns} data={dataWithActions} />
-            )}
-          </div>
+         
         </div>
       </div>
 

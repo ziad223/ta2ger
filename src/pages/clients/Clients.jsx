@@ -1,4 +1,3 @@
-'use client';
 import React, { useState, useEffect, useMemo } from "react";
 import Container from "../../components/shared/Container";
 import { FaPrint, FaTrashAlt } from "react-icons/fa";
@@ -19,7 +18,6 @@ const Clients = () => {
   const [selectedClient, setSelectedClient] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // ✅ جلب البيانات من API
   const fetchClients = async () => {
     try {
       setLoading(true);
@@ -41,9 +39,9 @@ const Clients = () => {
             nationalId: client.id_number,
             phone: client.phone,
             altPhone: client.alt_phone,
-            createdAt: client.creator?.name || "—",
+            createdBy: client.creator?.name || "—",
             hall: client.hall?.name || "—",
-            bookings: client.tax_no || "—",
+            taxNo: client.tax_no || "—",
           })) || [];
 
         setClients(fetchedClients);
@@ -62,53 +60,54 @@ const Clients = () => {
     fetchClients();
   }, []);
 
-  // ✅ فلترة البحث
+  // ✅ فلترة العملاء
   const filteredClients = useMemo(() => {
     if (!searchTerm.trim()) return clients;
     return clients.filter((client) =>
-      client.phone.includes(searchTerm.trim())
+      client.phone?.includes(searchTerm.trim())
     );
   }, [searchTerm, clients]);
 
+  // ✅ الأعمدة
   const columns = [
     { label: "#", key: "id" },
     { label: "الاسم", key: "name" },
+    { label: "رقم الهوية", key: "nationalId" },
     { label: "الجوال", key: "phone" },
-    { label: "رقم جوال اخر", key: "altPhone" },
+    { label: "جوال آخر", key: "altPhone" },
     { label: "القاعة", key: "hall" },
-    { label: "رقم ضريبي", key: "bookings" },
-    { label: "التحكم", key: "actions" },
+    { label: "الرقم الضريبي", key: "taxNo" },
+    { label: "أُضيف بواسطة", key: "createdBy" },
+    {
+      label: "التحكم",
+      key: "actions",
+      render: (client) => (
+        <div className="flex gap-2 justify-center">
+          <button
+            onClick={() => {
+              setSelectedClient(client);
+              setEditModalOpen(true);
+            }}
+            className="text-white bg-gradient-to-r from-[#0dcaf0] to-[#09a5cc] w-[30px] h-[30px] rounded-md flex items-center justify-center shadow-md hover:scale-110 hover:shadow-lg transition-transform duration-200"
+          >
+            <CiEdit size={22} />
+          </button>
+
+          <button
+            onClick={() => {
+              setSelectedClient(client);
+              setDeleteModalOpen(true);
+            }}
+            className="text-white bg-red-500 w-[30px] h-[30px] rounded-sm flex items-center justify-center hover:bg-red-600 transition"
+          >
+            <FaTrashAlt size={15} />
+          </button>
+        </div>
+      ),
+    },
   ];
 
-  // ✅ تجهيز البيانات مع أزرار التحكم
-  const dataWithActions = filteredClients.map((client) => ({
-    ...client,
-    actions: (
-      <div className="flex gap-2 justify-center">
-        <button
-          onClick={() => {
-            setSelectedClient(client);
-            setEditModalOpen(true);
-          }}
-          className="text-white text-xs bg-gradient-to-r from-[#0dcaf0] to-[#09a5cc] w-[30px] h-[30px] rounded-md flex items-center justify-center shadow-md hover:scale-110 hover:shadow-lg transition-transform duration-200"
-        >
-          <CiEdit size={22} />
-        </button>
-
-        <button
-          onClick={() => {
-            setSelectedClient(client);
-            setDeleteModalOpen(true);
-          }}
-          className="text-white text-xs bg-red-500 w-[30px] h-[30px] rounded-sm flex items-center justify-center hover:bg-red-600 transition"
-        >
-          <FaTrashAlt size={15} />
-        </button>
-      </div>
-    ),
-  }));
-
-  // ✅ الحذف (مؤقت محليًا)
+  // ✅ حذف العميل
   const handleDeleteClient = () => {
     setClients((prev) => prev.filter((c) => c.id !== selectedClient.id));
     setDeleteModalOpen(false);
@@ -151,19 +150,22 @@ const Clients = () => {
             </div>
           </div>
 
-         
+          {/* ✅ الجدول */}
+          <Table columns={columns} data={filteredClients} />
         </div>
       </div>
 
-      {/* ✅ مودالات */}
+      {/* ✅ المودالات */}
       <AddClientModal
         isOpen={isAddModalOpen}
         onClose={() => setAddModalOpen(false)}
+        refresh={fetchClients}
       />
       <EditClientModal
         isOpen={isEditModalOpen}
         onClose={() => setEditModalOpen(false)}
         client={selectedClient}
+        refresh={fetchClients}
       />
       <DeleteClientModal
         isOpen={isDeleteModalOpen}

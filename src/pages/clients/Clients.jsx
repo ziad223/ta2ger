@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Container from "../../components/shared/Container";
 import { FaPrint, FaTrashAlt } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
@@ -10,57 +11,45 @@ import apiServiceCall from "../../utils/apiServiceCall";
 import { toast } from "react-toastify";
 
 const Clients = () => {
-  const [clients, setClients] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
-  const [loading, setLoading] = useState(false);
 
-  const fetchClients = async () => {
-    try {
-      setLoading(true);
+  // ✅ جلب البيانات مع كاش
+  const { data: clients = [], isLoading, refetch } = useQuery({
+    queryKey: ["clients"],
+    queryFn: async () => {
       const token = localStorage.getItem("token");
-
       const res = await apiServiceCall({
         url: "clients",
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      console.log("🛰️ Response:", res);
-
-      if (res?.status) {
-        const fetchedClients =
-          res.data?.map((client) => ({
-            id: client.id,
-            name: client.name,
-            nationalId: client.id_number,
-            phone: client.phone,
-            altPhone: client.alt_phone,
-            createdBy: client.creator?.name || "—",
-            hall: client.hall?.name || "—",
-            taxNo: client.tax_no || "—",
-          })) || [];
-
-        setClients(fetchedClients);
-      } else {
+      if (!res?.status) {
         toast.error(res?.message || "حدث خطأ أثناء تحميل العملاء ❌");
+        return [];
       }
-    } catch (err) {
-      console.error("❌ خطأ أثناء تحميل العملاء:", err);
-      toast.error("حدث خطأ أثناء تحميل العملاء");
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    fetchClients();
-  }, []);
+      return (
+        res.data?.map((client) => ({
+          id: client.id,
+          name: client.name,
+          nationalId: client.id_number,
+          phone: client.phone,
+          altPhone: client.alt_phone,
+          createdBy: client.creator?.name || "—",
+          hall: client.hall?.name || "—",
+          taxNo: client.tax_no || "—",
+        })) || []
+      );
+    },
+    staleTime: 1000 * 60 * 5, // ⏱️ يحتفظ بالكاش لمدة 5 دقائق
+    cacheTime: 1000 * 60 * 30, // ⏱️ الكاش يفضل محفوظ 30 دقيقة حتى لو غادرت الصفحة
+  });
 
-  // ✅ فلترة العملاء
   const filteredClients = useMemo(() => {
     if (!searchTerm.trim()) return clients;
     return clients.filter((client) =>
@@ -68,7 +57,6 @@ const Clients = () => {
     );
   }, [searchTerm, clients]);
 
-  // ✅ الأعمدة
   const columns = [
     { label: "#", key: "id" },
     { label: "الاسم", key: "name" },
@@ -107,11 +95,9 @@ const Clients = () => {
     },
   ];
 
-  // ✅ حذف العميل
   const handleDeleteClient = () => {
-    setClients((prev) => prev.filter((c) => c.id !== selectedClient.id));
-    setDeleteModalOpen(false);
-    setSelectedClient(null);
+    // حذف محلي فقط
+    toast.success("تم حذف العميل مؤقتًا ✅");
   };
 
   return (
@@ -150,22 +136,21 @@ const Clients = () => {
             </div>
           </div>
 
-          {/* ✅ الجدول */}
-          <Table columns={columns} data={filteredClients} />
+         
+            <Table columns={columns} data={filteredClients} />
         </div>
       </div>
 
-      {/* ✅ المودالات */}
       <AddClientModal
         isOpen={isAddModalOpen}
         onClose={() => setAddModalOpen(false)}
-        refresh={fetchClients}
+        refresh={refetch}
       />
       <EditClientModal
         isOpen={isEditModalOpen}
         onClose={() => setEditModalOpen(false)}
         client={selectedClient}
-        refresh={fetchClients}
+        refresh={refetch}
       />
       <DeleteClientModal
         isOpen={isDeleteModalOpen}

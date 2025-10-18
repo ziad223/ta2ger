@@ -15,7 +15,7 @@ const daysOfWeek = [
   "السبت",
 ];
 
-// بيانات القاعات المتاحة بشكل تجريبي
+// بيانات القاعات
 const sampleHalls = [
   { id: 1, name: "القاعة الكبرى", color: "bg-green-100 text-green-700" },
   { id: 2, name: "القاعة الجانبية", color: "bg-blue-100 text-blue-700" },
@@ -24,11 +24,32 @@ const sampleHalls = [
   { id: 5, name: "القاعة الماسية", color: "bg-yellow-100 text-yellow-700" },
 ];
 
-const ReservationsSchedule = () => {
-  const [currentDate, setCurrentDate] = useState(new Date(2025, 8, 1)); // سبتمبر 2025
-  const [viewMode, setViewMode] = useState("month"); // month | week
+// بيانات حجز عشوائية
+const bookedData = [
+  {
+    name: "خالد عبدالله",
+    total: 6000,
+    deposit: 700,
+    remaining: 5300,
+  },
+  {
+    name: "منى أحمد",
+    total: 4500,
+    deposit: 1000,
+    remaining: 3500,
+  },
+  {
+    name: "محمد فوزي",
+    total: 5000,
+    deposit: 500,
+    remaining: 4500,
+  },
+];
 
-  // التنقل بين الشهور / الأسابيع
+const ReservationsSchedule = () => {
+  const [currentDate, setCurrentDate] = useState(new Date(2025, 8, 1));
+  const [viewMode, setViewMode] = useState("month");
+
   const next = () => {
     setCurrentDate(
       new Date(
@@ -49,7 +70,6 @@ const ReservationsSchedule = () => {
     );
   };
 
-  // حساب عدد الأيام في الشهر
   const daysInMonth = new Date(
     currentDate.getFullYear(),
     currentDate.getMonth() + 1,
@@ -64,21 +84,22 @@ const ReservationsSchedule = () => {
 
   const daysArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
-  // دالة لاختيار قاعة عشوائية أو لا توجد قاعات
-  const getRandomHall = () => {
+  // دالة لتوليد عشوائي لحجز أو قاعة متاحة
+  const getRandomStatus = () => {
     const random = Math.random();
-    if (random < 0.2) {
-      // احتمال 20% ما يكونش فيه قاعات
-      return null;
+    if (random < 0.4) {
+      // 40% احتمال يكون محجوز
+      const booking =
+        bookedData[Math.floor(Math.random() * bookedData.length)];
+      return { booked: true, booking };
     }
-    return sampleHalls[Math.floor(Math.random() * sampleHalls.length)];
+    // غير محجوز
+    return { booked: false, hall: sampleHalls[Math.floor(Math.random() * sampleHalls.length)] };
   };
 
-  // حساب الأسبوع الحالي (من الأحد إلى السبت)
   const getWeekDays = () => {
     const startOfWeek = new Date(currentDate);
     const day = startOfWeek.getDay();
-    // ضبط البداية على يوم الأحد
     const diff = day === 0 ? 0 : -day;
     startOfWeek.setDate(currentDate.getDate() + diff);
 
@@ -158,6 +179,7 @@ const ReservationsSchedule = () => {
 
         {/* Calendar */}
         <div className="mt-10">
+          {/* 📅 العرض الشهري */}
           {viewMode === "month" && (
             <div className="grid grid-cols-7 gap-3 text-center">
               {daysOfWeek.map((day, i) => (
@@ -171,7 +193,7 @@ const ReservationsSchedule = () => {
               ))}
 
               {daysArray.map((day) => {
-                const hall = getRandomHall();
+                const status = getRandomStatus();
                 return (
                   <div
                     key={day}
@@ -179,72 +201,42 @@ const ReservationsSchedule = () => {
                   >
                     <div className="font-bold text-gray-800">{day}</div>
 
-                    <div className="mt-3">
-                      {hall ? (
-                        <div
-                          className={`text-xs px-3 py-2 rounded-lg font-semibold ${hall.color}`}
-                        >
-                          {hall.name}
-                        </div>
-                      ) : (
-                        <div className="text-xs px-3 py-2 rounded-lg bg-gray-100 text-gray-500">
-                          لا توجد قاعات متاحة
-                        </div>
-                      )}
-                    </div>
-
-                    {hall && (
-                      <Link
-                        to="/new-booking"
-                        className="absolute bottom-2 left-1/2 -translate-x-1/2 hidden group-hover:flex items-center gap-1 bg-blue-600 text-white text-xs px-3 py-1.5 rounded-full shadow-md hover:bg-blue-700 transition"
-                      >
-                        <FiPlus size={14} />
-                        احجز
-                      </Link>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {/* 🗓 العرض الأسبوعي */}
-          {viewMode === "week" && (
-            <div className="grid grid-cols-7 gap-3 text-center">
-              {getWeekDays().map((date, i) => {
-                const hall = getRandomHall();
-                return (
-                  <div
-                    key={i}
-                    className="border rounded-lg p-4 bg-white hover:bg-blue-50 transition cursor-pointer text-sm text-gray-700 shadow-sm group relative flex flex-col justify-between"
-                  >
-                    <div className="font-bold text-gray-800">
-                      {daysOfWeek[i]}
-                    </div>
-                    <div className="text-xs text-gray-500 mb-2">
-                      {date.getDate()} {date.toLocaleString("ar-EG", { month: "short" })}
-                    </div>
-
-                    {hall ? (
-                      <div
-                        className={`text-xs px-3 py-2 rounded-lg font-semibold ${hall.color}`}
-                      >
-                        {hall.name}
+                    {/* إذا القاعة محجوزة */}
+                    {status.booked ? (
+                      <div className="mt-3 text-xs bg-red-50 text-red-700 p-3 rounded-lg space-y-1 text-right">
+                        <p className="font-bold text-red-800">محجوز</p>
+                        <p>
+                          <span className="font-semibold text-s">العميل:</span>{" "}
+                          {status.booking.name}
+                        </p>
+                        <p>
+                          <span className="font-semibold">المبلغ:</span>{" "}
+                          {status.booking.total} ج
+                        </p>
+                        <p>
+                          <span className="font-semibold">العربون:</span>{" "}
+                          {status.booking.deposit} ج
+                        </p>
+                        <p>
+                          <span className="font-semibold">المتبقي:</span>{" "}
+                          {status.booking.remaining} ج
+                        </p>
                       </div>
                     ) : (
-                      <div className="text-xs px-3 py-2 rounded-lg bg-gray-100 text-gray-500">
-                        لا توجد قاعات متاحة
-                      </div>
-                    )}
-
-                    {hall && (
-                      <Link
-                        to="/new-booking"
-                        className="absolute bottom-2 left-1/2 -translate-x-1/2 hidden group-hover:flex items-center gap-1 bg-blue-600 text-white text-xs px-3 py-1.5 rounded-full shadow-md hover:bg-blue-700 transition"
-                      >
-                        <FiPlus size={14} />
-                        احجز
-                      </Link>
+                      <>
+                        <div
+                          className={`mt-3 text-xs px-3 py-2 rounded-lg font-semibold ${status.hall.color}`}
+                        >
+                          {status.hall.name}
+                        </div>
+                        <Link
+                          to="/new-booking"
+                          className="absolute bottom-2 left-1/2 -translate-x-1/2 hidden group-hover:flex items-center gap-1 bg-blue-600 text-white text-xs px-3 py-1.5 rounded-full shadow-md hover:bg-blue-700 transition"
+                        >
+                          <FiPlus size={14} />
+                          احجز
+                        </Link>
+                      </>
                     )}
                   </div>
                 );
